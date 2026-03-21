@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="login_wordmark_title">A.I.</string>
+    <string name="login_wordmark_subtitle">DETECTIVE STORIES</string>
+    <string name="login_warning">UNAUTHORIZED ACCESS DETECTED</string>
+    <string name="login_badge_placeholder">Detective Badge No.</string>
+    <string name="login_passcode_placeholder">Passcode</string>
+    <string name="login_enter_system">ENTER SYSTEM</string>
+    <string name="login_create_archive_record">CREATE NEW ARCHIVE RECORD</string>
+    <string name="login_footer_status">SYSTEM GPD-4X // V 1.0.4</string>
+    <string name="login_footer_secure_channel">ENCRYPTED SECURE CHANNEL</string>
+    <string name="next">Next</string>
+    <string name="error_account_exists">An account with that email or username already exists.</string>
+    <string name="error_email_exists">An account with that email already exists.</string>
+    <string name="error_username_exists">An account with that username already exists.</string>
+    <string name="error_invalid_password">Password must be at least 9 characters and include one digit and one uppercase letter</string>
+    <string name="error_invalid_email">This is not a valid email</string>
+    <string name="error_invalid_username">The username must be between 3 and 20 characters</string>
+    <!-- Screen titles / labels -->
+    <!-- Starter -->
+    <string name="login_unavailable_message">Login flow is not available yet. Register a new badge to continue.</string>
+    <string name="register_screen_title">NEW RECORD</string>
+    <string name="register_quote">"The city is already lost."</string>
+    <string name="register_successful">"Registration successful."</string>
+    <string name="register_username_placeholder">Full Name</string>
+    <string name="register_email_placeholder">Encrypted Comm Link (Email)</string>
+    <string name="register_password_placeholder">Passcode</string>
+    <string name="register_retype_password_placeholder">Re-type Passcode</string>
+    <string name="register_begin_first_case">BEGIN YOUR FIRST CASE</string>
+    <string name="register_return_to_login">RETURN TO LOGIN</string>
+    <!-- Verification -->
+    <string name="verification_successful_screen_title">Verification Successful</string>
+    <string name="verification_successful_screen_description">We've sent an email verification link to %1$s. Please check your inbox.</string>
+    <string name="verification_successful_screen_resend_link">Resend Verification Link</string>
+    <string name="email_signal_dispatched_title">SIGNAL DISPATCHED</string>
+    <string name="email_signal_dispatched_primary">A secure decryption link has been dispatched to your designated frequency.</string>
+    <string name="email_signal_dispatched_secondary">VERIFY YOUR ENCRYPTED COMM CHANNEL TO FINALIZE THE CONNECTION.</string>
+    <string name="email_signal_verifying_title">VERIFYING CHANNEL</string>
+    <string name="email_signal_verifying_primary">Decrypting the inbound verification handshake.</string>
+    <string name="email_signal_verifying_secondary">HOLD POSITION WHILE THE COMM CHANNEL IS AUTHENTICATED.</string>
+    <string name="email_signal_verified_title">CHANNEL VERIFIED</string>
+    <string name="email_signal_verified_primary">Your encrypted comm channel has been verified.</string>
+    <string name="email_signal_verified_secondary">RETURN TO THE TERMINAL AND RESUME ACTIVE CASEWORK.</string>
+    <string name="email_signal_failed_title">SIGNAL LOST</string>
+    <string name="email_signal_failed_primary">Unable to validate the encrypted verification link.</string>
+    <string name="email_signal_failed_secondary">REQUEST A FRESH SIGNAL OR OPEN A NEW DISPATCH TO RETRY THE HANDSHAKE.</string>
+    <string name="email_signal_return_to_terminal">RETURN TO TERMINAL</string>
+    <string name="email_signal_resend">RESEND SIGNAL</string>
+    <string name="email_signal_resending">RE-TRANSMITTING SIGNAL...</string>
+    <string name="email_signal_resent">A fresh verification signal has been dispatched.</string>
+    <string name="email_signal_frequency">DESIGNATED FREQUENCY // %1$s</string>
+    <string name="email_signal_footer_pending">GCPD SECURE COMMS // PENDING HANDSHAKE</string>
+    <string name="email_signal_footer_verifying">GCPD SECURE COMMS // VERIFYING CHANNEL</string>
+    <string name="email_signal_footer_verified">GCPD SECURE COMMS // CHANNEL VERIFIED</string>
+    <string name="email_signal_footer_failed">GCPD SECURE COMMS // SIGNAL COMPROMISED</string>
+    <!-- Account created -->
+    <string name="account_created_screen_title">Account created.</string>
+    <string name="account_created_screen_description">Your account has been successfully verified. You can now access all features and continue.</string>
+    <string name="verifying_account">Verifying account...</string>
+    <string name="email_verified_successfully">Email verified successfully!</string>
+    <string name="email_verified_failed">Failed to verify your email</string>
+    <string name="email_verified_successfully_desc">
+        Your email has been verified. You can now log in with your credentials.
+    </string>
+    <string name="email_verified_failed_desc">
+        Unable to verify your email. Maybe the link is invalid or has expired.
+    </string>
+    <string name="close">Close</string>
+</resources>
