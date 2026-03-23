@@ -1,5 +1,6 @@
 package com.kaanf.auth.presentation.register
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
+import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
@@ -119,6 +121,10 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
+        Spacer(
+            modifier = Modifier.weight(0.4f),
+        )
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -166,8 +172,6 @@ fun RegisterScreen(
         BaseButton(
             text = stringResource(Res.string.register_begin_first_case),
             onClick = {
-                focusManager.clearFocus(force = true)
-                keyboardController?.hide()
                 onAction(RegisterAction.OnRegisterClick)
             },
             modifier = Modifier
@@ -196,6 +200,9 @@ fun RegisterScreen(
 private fun RegisterScreenPreview() {
     DetectiveAiStoriesTheme(isDarkTheme = true) {
         RegisterScreen(
+            modifier = Modifier.background(
+                AccessDefaults.PanelBackground
+            ),
             state = RegisterState(
                 usernameTextState = TextFieldState("John Doe"),
                 emailTextState = TextFieldState("detective@agency.io"),

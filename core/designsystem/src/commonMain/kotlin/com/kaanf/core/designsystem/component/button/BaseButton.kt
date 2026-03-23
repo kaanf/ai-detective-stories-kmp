@@ -49,7 +49,7 @@ fun BaseButton(
         modifier = modifier
             .fillMaxWidth()
             .height(54.dp)
-            .alpha(if (enabled) 1f else 0.6f)
+            .alpha(if (enabled) 1f else 0.5f)
             .then(backgroundModifier)
             .border(
                 width = 1.dp,

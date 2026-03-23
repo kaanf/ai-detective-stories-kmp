@@ -17,14 +17,13 @@ fun SimpleBrandLogo(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.widthIn(max = 270.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = title,
             style = AccessTitleTextStyle(
-                fontSizeSp = 36,
+                fontSizeSp = 40,
                 letterSpacingSp = 7.2,
             ),
         )
@@ -32,7 +31,7 @@ fun SimpleBrandLogo(
         Text(
             text = subtitle,
             style = AccessTitleTextStyle(
-                fontSizeSp = 18,
+                fontSizeSp = 20,
                 letterSpacingSp = 4.2,
             ),
         )

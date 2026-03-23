@@ -6,7 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
-import com.kaanf.auth.presentation.email_verification.EmailVerificationRoot
+import com.kaanf.auth.presentation.email_verification.loading.EmailVerificationLoadingRoot
+import com.kaanf.auth.presentation.email_verification.verification_sent.EmailVerificationSentRoot
 import com.kaanf.auth.presentation.login.LoginRoot
 import com.kaanf.auth.presentation.register.RegisterRoot
 
@@ -49,18 +50,8 @@ fun NavGraphBuilder.authGraph(
         composable<AuthGraphRoutes.RegisterVerification> { backStackEntry ->
             val route = backStackEntry.toRoute<AuthGraphRoutes.RegisterVerification>()
 
-            EmailVerificationRoot(
-                email = route.email,
-                onReturnToTerminal = {
-                    navController.navigate(AuthGraphRoutes.Login) {
-                        popUpTo(AuthGraphRoutes.Register) {
-                            inclusive = true
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+            EmailVerificationSentRoot(
+
             )
         }
         composable<AuthGraphRoutes.EmailVerification>(
@@ -72,21 +63,8 @@ fun NavGraphBuilder.authGraph(
                     this.uriPattern = "detectiveaistories://api.kaanf.com/api/auth/verify?token={token}"
                 },
             )
-        ) { backStackEntry ->
-            val route = backStackEntry.toRoute<AuthGraphRoutes.EmailVerification>()
-
-            EmailVerificationRoot(
-                token = route.token,
-                onReturnToTerminal = {
-                    navController.navigate(AuthGraphRoutes.Login) {
-                        popUpTo(AuthGraphRoutes.Graph) {
-                            inclusive = false
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-            )
+        ) {
+            EmailVerificationLoadingRoot()
         }
     }
 }

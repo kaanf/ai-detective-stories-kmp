@@ -1,5 +1,6 @@
 package com.kaanf.auth.presentation.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -22,13 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kaanf.core.designsystem.component.brand.SimpleBrandLogo
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
+import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
@@ -44,6 +48,7 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.login_
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_warning
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_subtitle
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_lost_credentials
 
 @Composable
 fun LoginRoot(
@@ -90,12 +95,16 @@ fun LoginScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(all = 24.dp)
+            .padding(vertical = 24.dp, horizontal = 18.dp)
             .imePadding()
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
+        Spacer(
+            modifier = Modifier.weight(1f),
+        )
+
         SimpleBrandLogo(
             title = stringResource(Res.string.login_wordmark_title),
             subtitle = stringResource(Res.string.login_wordmark_subtitle),
@@ -113,12 +122,13 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp),
+                .padding(top = 18.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             BaseTextField(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.login_badge_placeholder),
+                keyboardType = KeyboardType.Email
             )
 
             BasePasswordTextField(
@@ -130,20 +140,35 @@ fun LoginScreen(
         BaseButton(
             text = stringResource(Res.string.login_enter_system),
             onClick = {
-                focusManager.clearFocus(force = true)
-                keyboardController?.hide()
                 onAction(LoginAction.OnLoginClick)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 18.dp),
             isLoading = state.isSubmitting,
+            enabled = state.isPasswordValid
+        )
+
+        Text(
+            text = stringResource(Res.string.login_lost_credentials),
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { onAction(LoginAction.OnRegisterClick) },
+                ),
+            style = AccessFooterTextStyle().copy(
+                color = AccessDefaults.FooterText,
+                fontSize = 10.sp
+            ),
+            textAlign = TextAlign.Center,
         )
 
         Text(
             text = stringResource(Res.string.login_create_archive_record),
             modifier = Modifier
-                .padding(top = 28.dp)
+                .padding(top = 18.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -160,6 +185,8 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     DetectiveAiStoriesTheme(isDarkTheme = true) {
         LoginScreen(
+            modifier = Modifier
+                .background(AccessDefaults.PanelBackground),
             state = LoginState(
                 emailTextState = TextFieldState("2049-ALPHA"),
                 passwordTextState = TextFieldState("classified"),

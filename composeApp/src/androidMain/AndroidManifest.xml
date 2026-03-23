@@ -27,8 +27,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https"
-                    android:host="api.kaanf.com"
-                    android:pathPrefix="/api/auth/verify" />
+                    android:host="ads.kaanf.com"
+                    android:pathPrefix="/api/auth/notification/activate-user" />
             </intent-filter>
 
             <intent-filter>
@@ -37,8 +37,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="detectiveaistories"
-                    android:host="api.kaanf.com"
-                    android:pathPrefix="/api/auth/verify" />
+                    android:host="ads.kaanf.com"
+                    android:pathPrefix="/api/auth/notification/activate-user" />
             </intent-filter>
         </activity>
     </application>
