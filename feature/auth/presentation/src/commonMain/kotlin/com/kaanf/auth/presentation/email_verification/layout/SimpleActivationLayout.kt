@@ -48,7 +48,7 @@ fun SimpleActivationLayout(
                 .imePadding()
                 .navigationBarsPadding()
                 .background(AccessDefaults.PanelBackground)
-                .padding(horizontal = 24.dp),
+                .padding(all = 24.dp),
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -87,7 +87,6 @@ fun SimpleActivationLayout(
                 modifier =
                     Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 24.dp)
                         .clickable {
                             onTextClick.invoke()
                         },

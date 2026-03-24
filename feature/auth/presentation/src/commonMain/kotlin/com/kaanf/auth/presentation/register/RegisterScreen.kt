@@ -20,13 +20,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.core.designsystem.component.button.BaseButton
+import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
+import com.kaanf.core.designsystem.component.layout.showSnackbar
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
 import com.kaanf.core.designsystem.theme.AccessDefaults
@@ -35,6 +35,7 @@ import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.UIText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_begin_first_case
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_email_placeholder
@@ -43,6 +44,8 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.regist
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_return_to_login
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_retype_password_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_screen_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_input_warning_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_uplink_failure_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -63,27 +66,27 @@ fun RegisterRoot(
                 onRegisterSuccess(event.email)
             }
 
-            is RegisterEvent.UsernameValidationSuccess -> {
-            }
-
-            is RegisterEvent.MailValidationSuccess -> {
-            }
-
-            is RegisterEvent.UsernameValidationFailure -> {
+            is RegisterEvent.PasswordValidationFailure -> {
                 snackbarHostState.showSnackbar(
-                    event.message.asStringAsync(),
+                    message = event.message.asStringAsync(),
+                    variant = CustomSnackbarVariant.Warning,
+                    title = UIText.Resource(Res.string.snackbar_input_warning_title).asStringAsync(),
                 )
             }
 
             is RegisterEvent.MailValidationFailure -> {
                 snackbarHostState.showSnackbar(
-                    event.message.asStringAsync(),
+                    message = event.message.asStringAsync(),
+                    variant = CustomSnackbarVariant.Warning,
+                    title = UIText.Resource(Res.string.snackbar_input_warning_title).asStringAsync(),
                 )
             }
 
             is RegisterEvent.Message -> {
                 snackbarHostState.showSnackbar(
-                    event.message.asStringAsync(),
+                    message = event.message.asStringAsync(),
+                    variant = CustomSnackbarVariant.Warning,
+                    title = UIText.Resource(Res.string.snackbar_uplink_failure_title).asStringAsync(),
                 )
             }
         }
@@ -109,9 +112,6 @@ fun RegisterScreen(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -204,7 +204,6 @@ private fun RegisterScreenPreview() {
                 AccessDefaults.PanelBackground
             ),
             state = RegisterState(
-                usernameTextState = TextFieldState("John Doe"),
                 emailTextState = TextFieldState("detective@agency.io"),
                 passwordTextState = TextFieldState("AccessKey9"),
             ),

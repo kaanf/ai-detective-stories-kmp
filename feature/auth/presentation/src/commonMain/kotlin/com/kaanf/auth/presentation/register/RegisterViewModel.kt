@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_unavailable_message
+import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_email
+import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_password
 
 class RegisterViewModel(
     private val authService: AuthService,
@@ -33,37 +34,14 @@ class RegisterViewModel(
 
     fun onAction(action: RegisterAction) {
         when (action) {
-            RegisterAction.OnNextClick -> {
-
+            RegisterAction.OnRegisterClick -> {
+                submitRegistration()
             }
 
-            RegisterAction.OnStartClick -> {
-            }
-
-            RegisterAction.OnTerminalRegisterClick -> submitRegistration()
-
-            RegisterAction.OnRegisterClick -> submitRegistration()
-
-            RegisterAction.OnBackClick -> {
-
-            }
-
-            RegisterAction.OnLoginClick -> {
-                viewModelScope.launch {
-                    eventChannel.send(
-                        RegisterEvent.Message(
-                            UIText.Resource(Res.string.login_unavailable_message),
-                        ),
-                    )
-                }
-            }
+            RegisterAction.OnLoginClick -> Unit
 
             RegisterAction.OnTogglePasswordVisibilityClick -> {
                 _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
-            }
-
-            else -> {
-                // Don't analyze this field.
             }
         }
     }
@@ -73,14 +51,30 @@ class RegisterViewModel(
             return
         }
 
-        if (!_state.value.isPasswordValid) {
-            return
-        }
-
         register()
     }
 
     private fun register() = viewModelScope.launch {
+        if (!_state.value.isPasswordValid) {
+            eventChannel.send(
+                RegisterEvent.PasswordValidationFailure(
+                    UIText.Resource(Res.string.error_invalid_password)
+                )
+            )
+
+            return@launch
+        }
+
+        if (!_state.value.isEmailValid) {
+            eventChannel.send(
+                RegisterEvent.MailValidationFailure(
+                    UIText.Resource(Res.string.error_invalid_email)
+                )
+            )
+
+            return@launch
+        }
+
         val currentState = _state.value
 
         _state.update {

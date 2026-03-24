@@ -62,7 +62,7 @@ class KtorAuthService(
 
     override suspend fun verifyEmail(token: String): EmptyResult<DataError.Remote> {
         return httpClient.get(
-            route = "/auth/verify",
+            route = "/notification/activate-user",
             queryParams = mapOf("token" to token),
         )
     }

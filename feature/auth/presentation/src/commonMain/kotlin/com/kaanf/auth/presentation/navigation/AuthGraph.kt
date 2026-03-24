@@ -47,20 +47,27 @@ fun NavGraphBuilder.authGraph(
                 },
             )
         }
-        composable<AuthGraphRoutes.RegisterVerification> { backStackEntry ->
-            val route = backStackEntry.toRoute<AuthGraphRoutes.RegisterVerification>()
-
+        composable<AuthGraphRoutes.RegisterVerification> {
             EmailVerificationSentRoot(
-
+                onLoginClick = {
+                    navController.navigate(AuthGraphRoutes.Login) {
+                        popUpTo(AuthGraphRoutes.Register) {
+                            inclusive = true
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         }
         composable<AuthGraphRoutes.EmailVerification>(
             deepLinks = listOf(
                 navDeepLink {
-                    this.uriPattern = "https://api.kaanf.com/api/auth/verify?token={token}"
+                    this.uriPattern = "https://ads.kaanf.com/api/notification/activate-user?token={token}"
                 },
                 navDeepLink {
-                    this.uriPattern = "detectiveaistories://api.kaanf.com/api/auth/verify?token={token}"
+                    this.uriPattern = "detectiveaistories://ads.kaanf.com/api/notification/activate-user?token={token}"
                 },
             )
         ) {

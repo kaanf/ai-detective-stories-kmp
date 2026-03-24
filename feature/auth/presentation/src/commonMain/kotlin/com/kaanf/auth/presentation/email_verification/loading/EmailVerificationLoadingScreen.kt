@@ -3,9 +3,6 @@ package com.kaanf.auth.presentation.email_verification.loading
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,32 +23,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kaanf.auth.presentation.email_verification.component.icon.ForgotPasswordLockIcon
 import com.kaanf.auth.presentation.email_verification.component.icon.VerificationLoadingIcon
 import com.kaanf.auth.presentation.email_verification.component.progress.VerificationProgressBar
+import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
+import com.kaanf.core.designsystem.component.layout.showSnackbar
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.UIText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_footer_primary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_footer_secondary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_progress
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_signature_failed
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_signature_pending
@@ -60,6 +50,7 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.email_
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_subtitle
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_target_label
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_loading_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_title
 import kotlin.math.roundToInt
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -75,7 +66,11 @@ fun EmailVerificationLoadingRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
             is EmailVerificationLoadingEvent.Message -> {
-                snackbarHostState.showSnackbar(event.message.asStringAsync())
+                snackbarHostState.showSnackbar(
+                    message = event.message.asStringAsync(),
+                    variant = CustomSnackbarVariant.Failure,
+                    title = UIText.Resource(Res.string.email_signal_failed_title).asStringAsync(),
+                )
             }
         }
     }

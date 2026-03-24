@@ -18,6 +18,10 @@
     <string name="error_invalid_password">Password must be at least 9 characters and include one digit and one uppercase letter</string>
     <string name="error_invalid_email">This is not a valid email</string>
     <string name="error_invalid_username">The username must be between 3 and 20 characters</string>
+    <string name="snackbar_access_denied_title">ACCESS DENIED</string>
+    <string name="snackbar_access_granted_title">ACCESS GRANTED</string>
+    <string name="snackbar_uplink_failure_title">UPLINK FAILURE</string>
+    <string name="snackbar_input_warning_title">INPUT WARNING</string>
     <!-- Screen titles / labels -->
     <!-- Starter -->
     <string name="login_unavailable_message">Login flow is not available yet. Register a new badge to continue.</string>
@@ -35,7 +39,7 @@
     <string name="verification_successful_screen_description">We've sent an email verification link to %1$s. Please check your inbox.</string>
     <string name="verification_successful_screen_resend_link">Resend Verification Link</string>
     <string name="email_signal_dispatched_title">SIGNAL DISPATCHED</string>
-    <string name="email_signal_dispatched_primary">A secure decryption link has been dispatched to your designated frequency.</string>
+    <string name="email_signal_dispatched_primary">A secure decryption link has been dispatched to %1$s.</string>
     <string name="email_signal_dispatched_secondary">VERIFY YOUR ENCRYPTED COMM CHANNEL TO FINALIZE THE CONNECTION.</string>
     <string name="email_signal_loading_title">DECRYPTING LINK</string>
     <string name="email_signal_loading_subtitle">VALIDATING SECURE CONNECTION</string>

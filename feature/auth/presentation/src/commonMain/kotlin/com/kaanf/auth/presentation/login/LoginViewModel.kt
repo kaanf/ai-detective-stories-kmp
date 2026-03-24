@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
+import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_email
+import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_password
 import detective_ai_stories.feature.auth.presentation.generated.resources.login
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
@@ -52,6 +54,20 @@ class LoginViewModel(
         }
 
         if (!currentState.isEmailValid) {
+            eventChannel.send(
+                LoginEvent.Failure(
+                    UIText.Resource(Res.string.error_invalid_email)
+                )
+            )
+            return@launch
+        }
+
+        if (!currentState.isPasswordValid) {
+            eventChannel.send(
+                LoginEvent.Failure(
+                    UIText.Resource(Res.string.error_invalid_password)
+                )
+            )
             return@launch
         }
 
@@ -61,8 +77,6 @@ class LoginViewModel(
             )
         }
 
-        delay(2000L)
-
         try {
             when (
                 val result = authService.login(
@@ -71,16 +85,12 @@ class LoginViewModel(
                 )
             ) {
                 is Result.Success -> {
-                    eventChannel.send(
-                        LoginEvent.Message(
-                            UIText.Resource(Res.string.login)
-                        )
-                    )
+                    eventChannel.send(LoginEvent.Success)
                 }
 
                 is Result.Failure -> {
                     eventChannel.send(
-                        LoginEvent.Message(
+                        LoginEvent.Failure(
                             result.error.toUiText()
                         )
                     )

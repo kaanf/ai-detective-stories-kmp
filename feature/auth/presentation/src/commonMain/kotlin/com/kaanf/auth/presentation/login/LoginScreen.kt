@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kaanf.core.designsystem.component.brand.SimpleBrandLogo
 import com.kaanf.core.designsystem.component.button.BaseButton
+import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
+import com.kaanf.core.designsystem.component.layout.showSnackbar
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
 import com.kaanf.core.designsystem.theme.AccessDefaults
@@ -37,18 +39,22 @@ import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.UIText
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
+import detective_ai_stories.feature.auth.presentation.generated.resources.login
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_badge_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_create_archive_record
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_enter_system
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_lost_credentials
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_passcode_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_warning
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_subtitle
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_lost_credentials
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_access_denied_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_access_granted_title
 
 @Composable
 fun LoginRoot(
@@ -60,9 +66,17 @@ fun LoginRoot(
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is LoginEvent.Message -> {
+            is LoginEvent.Failure -> {
                 snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync()
+                    message = event.message.asStringAsync(),
+                    variant = CustomSnackbarVariant.Failure,
+                )
+            }
+
+            LoginEvent.Success -> {
+                snackbarHostState.showSnackbar(
+                    message = UIText.Resource(Res.string.login).asStringAsync(),
+                    variant = CustomSnackbarVariant.Success,
                 )
             }
 

@@ -2,4 +2,8 @@
 <resources>
     <string name="hide_password">Hide Password</string>
     <string name="show_password">Show Password</string>
+
+    <string name="snackbar_verification_complete">VERIFICATION COMPLETE</string>
+    <string name="snackbar_access_denied">ACCESS DENIED</string>
+    <string name="snackbar_uplink_failure">UPLINK FAILURE</string>
 </resources>
