@@ -3,14 +3,24 @@ package com.kaanf.auth.presentation.email_verification.verification_sent
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kaanf.core.domain.auth.AuthService
+import com.kaanf.core.domain.util.Result
+import com.kaanf.core.presentation.util.UIText
+import com.kaanf.core.presentation.util.toUiText
+import detective_ai_stories.feature.auth.presentation.generated.resources.Res
+import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resent
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EmailVerificationSentViewModel(
+    private val authService: AuthService,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val email =
@@ -34,12 +44,92 @@ class EmailVerificationSentViewModel(
             initialValue = _state.value,
         )
 
+    init {
+        startResendCountdown()
+    }
+
     fun onAction(action: EmailVerificationSentAction) {
         when (action) {
-            EmailVerificationSentAction.OnResendSignalClick -> {}
-            EmailVerificationSentAction.OnReturnToTerminalClick -> {
+            EmailVerificationSentAction.OnResendSignalClicked -> {
+                resendVerificationSignal()
+            }
+
+            EmailVerificationSentAction.OnReturnToLoginClicked -> {
                 viewModelScope.launch {
-                    eventChannel.send(EmailVerificationSentEvent.NavigateToTerminal)
+                    eventChannel.send(EmailVerificationSentEvent.NavigateToLogin)
+                }
+            }
+        }
+    }
+
+    private fun resendVerificationSignal() = viewModelScope.launch {
+        val currentState = _state.value
+
+        if (currentState.isResending || !currentState.isResendEnabled) {
+            return@launch
+        }
+
+        _state.update {
+            it.copy(
+                isResending = true,
+                isResendEnabled = false,
+            )
+        }
+
+        try {
+            when (val result = authService.resendVerificationMail(email)) {
+                is Result.Success -> {
+                    eventChannel.send(
+                        EmailVerificationSentEvent.Success(
+                            UIText.Resource(Res.string.email_signal_resent),
+                        ),
+                    )
+
+                    startResendCountdown()
+                }
+
+                is Result.Failure -> {
+                    _state.update { state ->
+                        state.copy(isResendEnabled = true)
+                    }
+
+                    eventChannel.send(
+                        EmailVerificationSentEvent.Failure(
+                            result.error.toUiText(),
+                        ),
+                    )
+                }
+            }
+        } finally {
+            _state.update {
+                it.copy(isResending = false)
+            }
+        }
+    }
+
+    private var resendCountdownJob: Job? = null
+
+    companion object {
+        private const val RESEND_COUNTDOWN_SECONDS = 60
+    }
+
+    private fun startResendCountdown(durationSeconds: Int = RESEND_COUNTDOWN_SECONDS) {
+        resendCountdownJob?.cancel()
+        resendCountdownJob = viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isResendEnabled = false,
+                    resendCountdownSeconds = durationSeconds,
+                )
+            }
+
+            for (remainingSeconds in (durationSeconds - 1) downTo 0) {
+                delay(1_000L)
+                _state.update { state ->
+                    state.copy(
+                        resendCountdownSeconds = remainingSeconds,
+                        isResendEnabled = remainingSeconds == 0,
+                    )
                 }
             }
         }

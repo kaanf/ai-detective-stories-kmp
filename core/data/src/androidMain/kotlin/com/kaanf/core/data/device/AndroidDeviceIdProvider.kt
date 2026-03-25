@@ -10,6 +10,8 @@ class AndroidDeviceIdProvider(
     private val context: Context,
 ) : DeviceIdProvider {
     override fun getDeviceId(): String = getAndroidDeviceId(context)
+
+    fun getRandomizedDeviceId(): String = UUID.randomUUID().toString()
 }
 
 fun getAndroidDeviceId(context: Context): String =

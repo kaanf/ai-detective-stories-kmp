@@ -35,5 +35,4 @@ class ForgotPasswordViewModel : ViewModel() {
             else -> TODO("Handle actions")
         }
     }
-
 }

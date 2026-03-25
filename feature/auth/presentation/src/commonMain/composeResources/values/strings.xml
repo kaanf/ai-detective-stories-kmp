@@ -57,7 +57,7 @@
     <string name="email_signal_verified_primary">E-mail signature verified.</string>
     <string name="email_signal_verified_secondary">YOUR CREDENTIALS ARE NOW VALID FOR THE ARCHIVES.</string>
     <string name="email_signal_verified_create_persona">CREATE YOUR PERSONA</string>
-    <string name="email_signal_failed_title">SIGNAL LOST</string>
+    <string name="email_signal_failed_title">ACCESS DENIED</string>
     <string name="login_lost_credentials">LOST CREDENTIALS?</string>
     <string name="lost_credentials">LOST CREDENTIALS</string>
     <string name="lost_credentials_description">REQUEST SECURE OVERRIDE</string>
@@ -66,6 +66,7 @@
     <string name="email_signal_failed_secondary">REQUEST A FRESH SIGNAL OR OPEN A NEW DISPATCH TO RETRY THE HANDSHAKE.</string>
     <string name="email_signal_return_to_terminal">RETURN TO TERMINAL</string>
     <string name="email_signal_resend">RESEND SIGNAL</string>
+    <string name="email_signal_resend_countdown">RESEND SIGNAL (%1$ds)</string>
     <string name="email_signal_resending">RE-TRANSMITTING SIGNAL...</string>
     <string name="email_signal_resent">A fresh verification signal has been dispatched.</string>
     <string name="email_signal_frequency">DESIGNATED FREQUENCY // %1$s</string>
@@ -76,7 +77,8 @@
     <!-- Account created -->
     <string name="account_created_screen_title">Account created.</string>
     <string name="account_created_screen_description">Your account has been successfully verified. You can now access all features and continue.</string>
-    <string name="verifying_account">Verifying account...</string>
+    <string name="verifying_account">VERIFYING ACCOUNT</string>
+    <string name="do_not_close_this_window">Do not close this window.</string>
     <string name="email_verified_successfully">Email verified successfully!</string>
     <string name="email_verified_failed">Failed to verify your email</string>
     <string name="email_verified_successfully_desc">

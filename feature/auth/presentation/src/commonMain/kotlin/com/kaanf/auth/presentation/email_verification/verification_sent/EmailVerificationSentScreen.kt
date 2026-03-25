@@ -26,6 +26,7 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.email_
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_secondary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_title
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resend
+import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resend_countdown
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resending
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -34,22 +35,32 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun EmailVerificationSentRoot(
     viewModel: EmailVerificationSentViewModel = koinViewModel(),
-    onLoginClick: () -> Unit,
+    onReturnToLoginClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is EmailVerificationSentEvent.Message -> {
+            is EmailVerificationSentEvent.Success -> {
                 snackbarHostState.showSnackbar(
                     message = event.message.asStringAsync(),
                     variant = CustomSnackbarVariant.Success,
-                    title = UIText.Resource(Res.string.email_signal_dispatched_title).asStringAsync(),
+                    title = UIText.Resource(Res.string.email_signal_dispatched_title)
+                        .asStringAsync(),
                 )
             }
 
-            EmailVerificationSentEvent.NavigateToTerminal -> {}
+            is EmailVerificationSentEvent.Failure -> {
+                snackbarHostState.showSnackbar(
+                    message = event.message.asStringAsync(),
+                    variant = CustomSnackbarVariant.Warning,
+                )
+            }
+
+            EmailVerificationSentEvent.NavigateToLogin -> {
+                onReturnToLoginClick.invoke()
+            }
         }
     }
 
@@ -71,36 +82,47 @@ fun EmailVerificationSentScreen(
     state: EmailVerificationSentState,
     onAction: (EmailVerificationSentAction) -> Unit,
 ) {
-        SimpleActivationLayout(
-            title = stringResource(Res.string.email_signal_dispatched_title),
-            signalColor = AccessDefaults.AlertLine,
-            signalTitle = stringResource(
-                Res.string.email_signal_dispatched_primary,
-                state.registeredEmail,
-            ),
-            signalDescription = stringResource(Res.string.email_signal_dispatched_secondary),
-            icon = {
-                VerificationMailIcon()
-            },
-            onTextClick = {
+    SimpleActivationLayout(
+        modifier = modifier,
+        title = stringResource(Res.string.email_signal_dispatched_title),
+        signalColor = AccessDefaults.AlertLine,
+        signalTitle = stringResource(
+            Res.string.email_signal_dispatched_primary,
+            state.registeredEmail,
+        ),
+        signalDescription = stringResource(Res.string.email_signal_dispatched_secondary),
+        icon = {
+            VerificationMailIcon()
+        },
+        button = {
+            val resendButtonText =
+                if (state.isResendEnabled) {
+                    stringResource(Res.string.email_signal_resend)
+                } else {
+                    stringResource(
+                        Res.string.email_signal_resend_countdown,
+                        state.resendCountdownSeconds,
+                    )
+                }
 
-            },
-            button = {
-                BaseButton(
-                    text = stringResource(Res.string.email_signal_resend),
-                    loadingText = stringResource(Res.string.email_signal_resending),
-                    onClick = {
-                        onAction(EmailVerificationSentAction.OnResendSignalClick)
-                    },
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp),
-                    isLoading = state.isResending,
-                    enabled = state.isResendEnabled,
-                )
-            },
-        )
+            BaseButton(
+                text = resendButtonText,
+                loadingText = stringResource(Res.string.email_signal_resending),
+                onClick = {
+                    onAction(EmailVerificationSentAction.OnResendSignalClicked)
+                },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
+                isLoading = state.isResending,
+                enabled = state.isResendEnabled,
+            )
+        },
+        onTextClick = {
+            onAction(EmailVerificationSentAction.OnReturnToLoginClicked)
+        },
+    )
 }
 
 @Preview

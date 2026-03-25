@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,7 +55,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun RegisterRoot(
     viewModel: RegisterViewModel = koinViewModel(),
     onRegisterSuccess: (String) -> Unit,
-    onLoginClick: () -> Unit,
+    onReturnToLoginClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -66,19 +67,10 @@ fun RegisterRoot(
                 onRegisterSuccess(event.email)
             }
 
-            is RegisterEvent.PasswordValidationFailure -> {
+            is RegisterEvent.Failure -> {
                 snackbarHostState.showSnackbar(
                     message = event.message.asStringAsync(),
                     variant = CustomSnackbarVariant.Warning,
-                    title = UIText.Resource(Res.string.snackbar_input_warning_title).asStringAsync(),
-                )
-            }
-
-            is RegisterEvent.MailValidationFailure -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant = CustomSnackbarVariant.Warning,
-                    title = UIText.Resource(Res.string.snackbar_input_warning_title).asStringAsync(),
                 )
             }
 
@@ -88,6 +80,10 @@ fun RegisterRoot(
                     variant = CustomSnackbarVariant.Warning,
                     title = UIText.Resource(Res.string.snackbar_uplink_failure_title).asStringAsync(),
                 )
+            }
+
+            is RegisterEvent.NavigateToLogin -> {
+                onReturnToLoginClick.invoke()
             }
         }
     }
@@ -100,7 +96,6 @@ fun RegisterRoot(
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
             onAction = viewModel::onAction,
-            onLoginClick = onLoginClick,
         )
     }
 }
@@ -109,7 +104,6 @@ fun RegisterRoot(
 fun RegisterScreen(
     state: RegisterState,
     onAction: (RegisterAction) -> Unit,
-    onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -156,6 +150,7 @@ fun RegisterScreen(
             BaseTextField(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.register_email_placeholder),
+                keyboardType = KeyboardType.Email
             )
 
             BasePasswordTextField(
@@ -187,7 +182,9 @@ fun RegisterScreen(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = onLoginClick,
+                    onClick = {
+                        onAction(RegisterAction.OnLoginClick)
+                    },
                 ),
             style = AccessFooterTextStyle(),
             textAlign = TextAlign.Center,
@@ -208,7 +205,6 @@ private fun RegisterScreenPreview() {
                 passwordTextState = TextFieldState("AccessKey9"),
             ),
             onAction = {},
-            onLoginClick = {},
         )
     }
 }

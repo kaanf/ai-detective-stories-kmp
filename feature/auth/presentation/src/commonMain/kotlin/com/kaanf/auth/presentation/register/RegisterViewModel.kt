@@ -57,7 +57,7 @@ class RegisterViewModel(
     private fun register() = viewModelScope.launch {
         if (!_state.value.isPasswordValid) {
             eventChannel.send(
-                RegisterEvent.PasswordValidationFailure(
+                RegisterEvent.Failure(
                     UIText.Resource(Res.string.error_invalid_password)
                 )
             )
@@ -67,7 +67,7 @@ class RegisterViewModel(
 
         if (!_state.value.isEmailValid) {
             eventChannel.send(
-                RegisterEvent.MailValidationFailure(
+                RegisterEvent.Failure(
                     UIText.Resource(Res.string.error_invalid_email)
                 )
             )

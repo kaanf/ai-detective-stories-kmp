@@ -10,87 +10,124 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kaanf.auth.presentation.email_verification.component.icon.VerificationMailIcon
+import com.kaanf.auth.presentation.email_verification.component.icon.VerificationFailedIcon
 import com.kaanf.auth.presentation.email_verification.component.icon.VerificationSuccessIcon
 import com.kaanf.auth.presentation.email_verification.layout.SimpleActivationLayout
-import com.kaanf.auth.presentation.email_verification.verification_sent.EmailVerificationSentAction
 import com.kaanf.core.designsystem.component.button.BaseButton
+import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
+import com.kaanf.core.designsystem.component.layout.showSnackbar
+import com.kaanf.core.designsystem.component.layout.LoadingScreen
 import com.kaanf.core.designsystem.theme.AccessDefaults
-import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_primary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_secondary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.do_not_close_this_window
+import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_primary
+import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_secondary
+import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_title
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resend
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resending
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_create_persona
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_primary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_secondary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.verifying_account
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EmailVerificationResultRoot(
-    viewModel: EmailVerificationResultViewModel = viewModel(),
+    viewModel: EmailVerificationResultViewModel = koinViewModel(),
+    onLoginClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            else -> {}
+            is EmailVerificationResultEvent.Message -> {
+                snackbarHostState.showSnackbar(
+                    message = event.message.asStringAsync(),
+                    variant = if (state.phase == EmailVerificationPhase.Verified)
+                        CustomSnackbarVariant.Success
+                    else
+                        CustomSnackbarVariant.Failure,
+                )
+            }
+
+            EmailVerificationResultEvent.NavigateToResult -> {
+                onLoginClick.invoke()
+            }
         }
     }
 
-    SnackbarScaffold(snackbarHostState) { innerPading ->
-        EmailVerificationResultScreen(
-            modifier = Modifier
-                .padding(innerPading)
-                .consumeWindowInsets(innerPading),
-            state = state,
-            onAction = viewModel::onAction,
-        )
-    }
-}
+    SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
+        when (state.phase) {
+            EmailVerificationPhase.Verifying -> {
+                LoadingScreen(
+                    text = stringResource(Res.string.verifying_account),
+                    supportingText = stringResource(Res.string.do_not_close_this_window),
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding),
+                )
+            }
 
-@Composable
-fun EmailVerificationResultScreen(
-    modifier: Modifier,
-    state: EmailVerificationResultState,
-    onAction: (EmailVerificationResultAction) -> Unit,
-) {
-    SimpleActivationLayout(
-        modifier = modifier,
-        title = stringResource(Res.string.email_signal_verified_title),
-        signalColor = AccessDefaults.SuccessLine,
-        signalTitle = stringResource(Res.string.email_signal_verified_primary),
-        signalDescription = stringResource(Res.string.email_signal_verified_secondary),
-        icon = {
-            VerificationSuccessIcon()
-        },
-        button = {
-            BaseButton(
-                text = stringResource(Res.string.email_signal_verified_create_persona),
-                onClick = {
+            EmailVerificationPhase.Failed -> {
+                SimpleActivationLayout(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding),
+                    title = stringResource(Res.string.email_signal_failed_title),
+                    signalColor = AccessDefaults.AlertLine,
+                    signalTitle = stringResource(Res.string.email_signal_failed_primary),
+                    signalDescription = stringResource(Res.string.email_signal_failed_secondary),
+                    icon = {
+                        VerificationFailedIcon()
+                    },
+                    button = {
+                        BaseButton(
+                            text = stringResource(Res.string.email_signal_resend),
+                            onClick = {
 
-                },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp),
-            )
-        },
-    )
-}
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 24.dp),
+                        )
+                    },
+                    onTextClick = {
+                        onLoginClick.invoke()
+                    },
+                )
+            }
 
-@Preview
-@Composable
-private fun Preview() {
-    DetectiveAiStoriesTheme {
-        EmailVerificationResultRoot()
+            EmailVerificationPhase.Verified -> {
+                SimpleActivationLayout(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding),
+                    title = stringResource(Res.string.email_signal_verified_title),
+                    signalColor = AccessDefaults.SuccessLine,
+                    signalTitle = stringResource(Res.string.email_signal_verified_primary),
+                    signalDescription = stringResource(Res.string.email_signal_verified_secondary),
+                    icon = {
+                        VerificationSuccessIcon()
+                    },
+                    button = {
+                        BaseButton(
+                            text = stringResource(Res.string.email_signal_verified_create_persona),
+                            onClick = {
+                                onLoginClick.invoke()
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 24.dp),
+                        )
+                    },
+                )
+            }
+        }
     }
 }

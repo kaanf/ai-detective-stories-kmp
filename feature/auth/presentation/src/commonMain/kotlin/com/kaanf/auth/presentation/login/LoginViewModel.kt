@@ -15,8 +15,6 @@ import kotlinx.coroutines.launch
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_email
 import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_password
-import detective_ai_stories.feature.auth.presentation.generated.resources.login
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 
 class LoginViewModel(

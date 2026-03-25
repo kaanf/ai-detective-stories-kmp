@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.sp
 object AccessDefaults {
     val ScreenBackground = Color(0xFF1F1F1F)
     val PanelBackground = Color(0xFF0A0A0A)
+    val LoadingScreenBackground = Color(0xFF050303)
     val HeadingColor = Color(0xFFE0E0E0)
     val SupportingText = Color(0xFF7A7A7A)
     val FooterText = Color(0xFF555555)
@@ -28,6 +29,10 @@ object AccessDefaults {
     val LoadingButtonBorder = Color(0xFF701616)
     val LoadingButtonBackgroundStart = Color(0xFF141010)
     val LoadingButtonBackgroundEnd = Color(0xFF1B1616)
+    val LoadingIndicatorOuterTrack = Color(0xFF222222)
+    val LoadingIndicatorInnerTrack = Color(0xFF111111)
+    val LoadingIndicatorInnerSweep = Color(0xFFE0E0E0)
+    val LoadingIndicatorCore = Color(0xFF8A1C1C)
 }
 
 @Suppress("ComposableNaming")

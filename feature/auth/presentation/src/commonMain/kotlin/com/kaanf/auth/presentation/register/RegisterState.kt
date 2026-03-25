@@ -8,13 +8,7 @@ import com.kaanf.domain.EmailValidator
 data class RegisterState(
     val emailTextState: TextFieldState = TextFieldState(),
     val rePasswordTextState: TextFieldState = TextFieldState(),
-    val emailError: UIText? = null,
-    val isMailExists: Boolean = false,
     val passwordTextState: TextFieldState = TextFieldState(),
-    val passwordError: UIText? = null,
-    val usernameError: UIText? = null,
-    val isUsernameExists: Boolean = false,
-    val registrationError: UIText? = null,
     val isRegistering: Boolean = false,
     val isPasswordVisible: Boolean = false,
 ) {

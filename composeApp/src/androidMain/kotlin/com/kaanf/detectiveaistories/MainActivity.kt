@@ -1,20 +1,34 @@
 package com.kaanf.detectiveaistories
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.kaanf.detectiveaistories.navigation.ExternalUriHandler
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        dispatchDeepLinkIntent(intent)
 
         setContent {
             App()
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        dispatchDeepLinkIntent(intent)
+    }
+
+    private fun dispatchDeepLinkIntent(intent: Intent?) {
+        val uri = intent?.dataString ?: return
+        ExternalUriHandler.onNewUri(uri)
     }
 }
 

@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,12 +40,10 @@ import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
-import com.kaanf.core.presentation.util.UIText
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.login
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_badge_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_create_archive_record
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_enter_system
@@ -53,8 +52,6 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.login_
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_warning
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_subtitle
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_access_denied_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_access_granted_title
 
 @Composable
 fun LoginRoot(
@@ -74,10 +71,7 @@ fun LoginRoot(
             }
 
             LoginEvent.Success -> {
-                snackbarHostState.showSnackbar(
-                    message = UIText.Resource(Res.string.login).asStringAsync(),
-                    variant = CustomSnackbarVariant.Success,
-                )
+                // Todo: Navigate dashboard.
             }
 
             LoginEvent.NavigateToRegister -> {
@@ -142,21 +136,25 @@ fun LoginScreen(
             BaseTextField(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.login_badge_placeholder),
+                modifier = Modifier.testTag(LoginScreenTags.EmailField),
                 keyboardType = KeyboardType.Email
             )
 
             BasePasswordTextField(
                 state = state.passwordTextState,
                 placeholder = stringResource(Res.string.login_passcode_placeholder),
+                modifier = Modifier.testTag(LoginScreenTags.PasswordField),
             )
         }
 
         BaseButton(
             text = stringResource(Res.string.login_enter_system),
             onClick = {
+                focusManager.clearFocus()
                 onAction(LoginAction.OnLoginClick)
             },
             modifier = Modifier
+                .testTag(LoginScreenTags.SubmitButton)
                 .fillMaxWidth()
                 .padding(top = 18.dp),
             isLoading = state.isSubmitting,
@@ -182,6 +180,7 @@ fun LoginScreen(
         Text(
             text = stringResource(Res.string.login_create_archive_record),
             modifier = Modifier
+                .testTag(LoginScreenTags.RegisterButton)
                 .padding(top = 18.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },

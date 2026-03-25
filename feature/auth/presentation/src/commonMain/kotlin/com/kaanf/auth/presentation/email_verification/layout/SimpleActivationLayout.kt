@@ -26,7 +26,7 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_primary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_secondary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_return_to_terminal
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_return_to_login
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -83,7 +83,7 @@ fun SimpleActivationLayout(
 
         if (onTextClick != null) {
             Text(
-                text = stringResource(Res.string.email_signal_return_to_terminal),
+                text = stringResource(Res.string.register_return_to_login),
                 modifier =
                     Modifier
                         .align(Alignment.BottomCenter)

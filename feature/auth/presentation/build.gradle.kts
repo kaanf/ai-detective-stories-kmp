@@ -1,8 +1,18 @@
+import com.android.build.api.dsl.LibraryExtension
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+
 plugins {
     alias(libs.plugins.convention.cmp.feature)
 }
 
 kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    androidTarget {
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
+    }
+
     sourceSets {
         commonMain {
             dependencies {
@@ -17,6 +27,13 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
 
                 implementation(libs.bundles.koin.common)
+            }
+        }
+
+        commonTest {
+            dependencies {
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.uiTest)
             }
         }
 
@@ -38,6 +55,20 @@ kotlin {
             }
         }
     }
+}
+
+extensions.configure<LibraryExtension> {
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    add("androidTestImplementation", platform(libs.androidx.compose.bom))
+    add("androidTestImplementation", libs.androidx.compose.ui.test.junit4.android)
+    add("androidTestImplementation", libs.androidx.runner)
+    add("debugImplementation", platform(libs.androidx.compose.bom))
+    add("debugImplementation", libs.androidx.compose.ui.test.manifest)
 }
 
 compose.resources {
