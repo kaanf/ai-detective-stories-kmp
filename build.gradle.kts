@@ -87,34 +87,51 @@ tasks.named("ktlintFormat") {
     dependsOn(subprojects.map { "${it.path}:ktlintFormat" })
 }
 
-val aggregatedDetektTaskNames = setOf(
-    "detektMetadataCommonMain",
-    "detektMetadataCommonTest",
-    "detektMetadataIosMain",
-    "detektMetadataIosTest",
-    "detektAndroidDebug",
-    "detektAndroidDebugUnitTest",
-    "detektAndroidDebugAndroidTest",
-)
+val aggregatedDetektTaskNames =
+    setOf(
+        "detektMetadataCommonMain",
+        "detektMetadataCommonTest",
+        "detektMetadataIosMain",
+        "detektMetadataIosTest",
+        "detektAndroidDebug",
+        "detektAndroidDebugUnitTest",
+        "detektAndroidDebugAndroidTest",
+    )
 
-val detektTask: TaskProvider<Task> = tasks.register("detekt") {
-    group = "verification"
-    description = "Runs detekt for the source sets that contain actual KMP code."
-}
+val detektTask: TaskProvider<Task> =
+    tasks.register("detekt") {
+        group = "verification"
+        description = "Runs detekt for the source sets that contain actual KMP code."
+    }
 
-val detektBaselineTask: TaskProvider<Task> = tasks.register("detektBaseline") {
-    group = "verification"
-    description = "Creates detekt baselines for the source sets that contain actual KMP code."
-}
+val detektBaselineTask: TaskProvider<Task> =
+    tasks.register("detektBaseline") {
+        group = "verification"
+        description = "Creates detekt baselines for the source sets that contain actual KMP code."
+    }
+
+val androidLintTask: TaskProvider<Task> =
+    tasks.register("androidLint") {
+        group = "verification"
+        description = "Runs Android Lint for every Android target in the KMP project."
+    }
 
 gradle.projectsEvaluated {
+    androidLintTask.configure {
+        dependsOn(
+            subprojects.mapNotNull { project ->
+                project.tasks.findByName("lintDebug")?.path
+            },
+        )
+    }
+
     detektTask.configure {
         dependsOn(
             subprojects.flatMap { project ->
                 aggregatedDetektTaskNames.mapNotNull { taskName ->
                     project.tasks.findByName(taskName)?.path
                 }
-            }
+            },
         )
     }
 
@@ -123,10 +140,10 @@ gradle.projectsEvaluated {
             subprojects.flatMap { project ->
                 aggregatedDetektTaskNames.mapNotNull { taskName ->
                     project.tasks.findByName(
-                        taskName.replace("detekt", "detektBaseline")
+                        taskName.replace("detekt", "detektBaseline"),
                     )?.path
                 }
-            }
+            },
         )
     }
 }
