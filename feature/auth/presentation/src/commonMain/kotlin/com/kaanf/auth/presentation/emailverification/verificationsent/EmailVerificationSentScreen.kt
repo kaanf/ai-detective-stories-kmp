@@ -86,13 +86,13 @@ fun EmailVerificationSentScreen(
     SimpleActivationLayout(
         modifier = modifier,
         title = stringResource(Res.string.email_signal_dispatched_title),
-        signalColor = AccessDefaults.AlertLine,
-        signalTitle =
+        panelColor = AccessDefaults.AlertLine,
+        panelTitle =
             stringResource(
                 Res.string.email_signal_dispatched_primary,
                 state.registeredEmail,
             ),
-        signalDescription = stringResource(Res.string.email_signal_dispatched_secondary),
+        panelDescription = stringResource(Res.string.email_signal_dispatched_secondary),
         icon = {
             VerificationMailIcon()
         },

@@ -58,7 +58,7 @@ class KtorAuthService(
     override suspend fun resendVerificationMail(email: String): EmptyResult<DataError.Remote> {
         return httpClient.post(
             route = "/auth/resend-verification",
-            body = EmailRequest(email),
+            body = EmailRequest(email = email),
         )
     }
 
@@ -66,6 +66,13 @@ class KtorAuthService(
         return httpClient.get(
             route = "/notification/activate-user",
             queryParams = mapOf("token" to token),
+        )
+    }
+
+    override suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote> {
+        return httpClient.post(
+            route = "/notification/forget-password",
+            body = EmailRequest(email = email)
         )
     }
 }

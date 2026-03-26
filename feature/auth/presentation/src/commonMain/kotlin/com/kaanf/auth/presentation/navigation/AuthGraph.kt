@@ -7,6 +7,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
 import com.kaanf.auth.presentation.emailverification.verificationresult.EmailVerificationResultRoot
 import com.kaanf.auth.presentation.emailverification.verificationsent.EmailVerificationSentRoot
+import com.kaanf.auth.presentation.forgotpassword.ForgotPasswordRoot
 import com.kaanf.auth.presentation.login.LoginRoot
 import com.kaanf.auth.presentation.register.RegisterRoot
 
@@ -45,6 +46,9 @@ fun NavGraphBuilder.authGraph(
                     }
                 },
             )
+        }
+        composable<AuthGraphRoutes.ForgotPassword> {
+            ForgotPasswordRoot()
         }
         composable<AuthGraphRoutes.EmailVerificationSent> {
             EmailVerificationSentRoot(

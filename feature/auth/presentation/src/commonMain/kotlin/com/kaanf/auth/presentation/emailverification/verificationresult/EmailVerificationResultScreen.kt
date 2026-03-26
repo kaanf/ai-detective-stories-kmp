@@ -82,9 +82,9 @@ fun EmailVerificationResultRoot(
                             .padding(innerPadding)
                             .consumeWindowInsets(innerPadding),
                     title = stringResource(Res.string.email_signal_failed_title),
-                    signalColor = AccessDefaults.AlertLine,
-                    signalTitle = stringResource(Res.string.email_signal_failed_primary),
-                    signalDescription = stringResource(Res.string.email_signal_failed_secondary),
+                    panelColor = AccessDefaults.AlertLine,
+                    panelTitle = stringResource(Res.string.email_signal_failed_primary),
+                    panelDescription = stringResource(Res.string.email_signal_failed_secondary),
                     icon = {
                         VerificationFailedIcon()
                     },
@@ -112,9 +112,9 @@ fun EmailVerificationResultRoot(
                             .padding(innerPadding)
                             .consumeWindowInsets(innerPadding),
                     title = stringResource(Res.string.email_signal_verified_title),
-                    signalColor = AccessDefaults.SuccessLine,
-                    signalTitle = stringResource(Res.string.email_signal_verified_primary),
-                    signalDescription = stringResource(Res.string.email_signal_verified_secondary),
+                    panelColor = AccessDefaults.SuccessLine,
+                    panelTitle = stringResource(Res.string.email_signal_verified_primary),
+                    panelDescription = stringResource(Res.string.email_signal_verified_secondary),
                     icon = {
                         VerificationSuccessIcon()
                     },

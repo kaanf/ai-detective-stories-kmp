@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kaanf.auth.presentation.emailverification.component.VerificationInfoPanel
+import com.kaanf.auth.presentation.emailverification.component.icon.VerificationMailIcon
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
@@ -35,9 +36,9 @@ fun SimpleActivationLayout(
     modifier: Modifier = Modifier,
     icon: @Composable () -> Unit,
     title: String,
-    signalColor: Color,
-    signalTitle: String,
-    signalDescription: String,
+    panelTitle: String,
+    panelColor: Color,
+    panelDescription: String,
     button: @Composable () -> Unit,
     onTextClick: (() -> Unit)? = null,
 ) {
@@ -72,9 +73,9 @@ fun SimpleActivationLayout(
                 )
 
                 VerificationInfoPanel(
-                    title = signalTitle,
-                    description = signalDescription,
-                    color = signalColor,
+                    title = panelTitle,
+                    description = panelDescription,
+                    color = panelColor,
                 )
             }
 
@@ -107,12 +108,14 @@ fun SimpleActivationLayoutPreview() {
     DetectiveAiStoriesTheme {
         SimpleActivationLayout(
             title = stringResource(Res.string.email_signal_dispatched_title),
-            signalColor = AccessDefaults.AlertLine,
-            signalTitle = stringResource(Res.string.email_signal_dispatched_primary),
-            signalDescription = stringResource(Res.string.email_signal_dispatched_secondary),
+            panelColor = AccessDefaults.AlertLine,
+            panelTitle = stringResource(Res.string.email_signal_dispatched_primary),
+            panelDescription = stringResource(Res.string.email_signal_dispatched_secondary),
             onTextClick = {},
             button = {},
-            icon = {},
+            icon = {
+                VerificationMailIcon()
+            },
         )
     }
 }
