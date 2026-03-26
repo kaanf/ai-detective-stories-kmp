@@ -46,8 +46,8 @@ jobs:
       - name: Ensure Gradle wrapper is executable
         run: chmod +x ./gradlew
 
-      - name: Run ktlint and unit tests
-        run: ./gradlew --no-daemon ktlintCheck testDebugUnitTest
+      - name: Run ktlint, detekt, and unit tests
+        run: ./gradlew --no-daemon ktlintCheck detekt testDebugUnitTest
 
       - name: Upload unit test reports
         if: always()
@@ -57,6 +57,7 @@ jobs:
           path: |
             **/build/reports/tests/**
             **/build/test-results/**
+            **/build/reports/detekt/**
 
   android-instrumented-tests:
     if: github.event_name != 'pull_request' || github.head_ref == 'dev'
