@@ -46,7 +46,7 @@ curl -fsSL \
 echo "Extracting JDK bundle"
 tar -xzf "${archive_path}" -C "${jdk_extract_dir}"
 
-extracted_bundle="$(find "${jdk_extract_dir}" -maxdepth 1 -type d -name "*.jdk" | head -n 1)"
+extracted_bundle="$(find "${jdk_extract_dir}" -maxdepth 1 -mindepth 1 -type d | head -n 1)"
 if [ -z "${extracted_bundle}" ]; then
     echo "Failed to locate the extracted JDK bundle." >&2
     exit 1
