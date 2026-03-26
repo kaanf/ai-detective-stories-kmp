@@ -1,4 +1,4 @@
-package com.kaanf.domain
+package com.kaanf.core.domain.validation
 
 object EmailValidator {
     private const val EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"

@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -136,14 +135,12 @@ fun LoginScreen(
             BaseTextField(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.login_badge_placeholder),
-                modifier = Modifier.testTag(LoginScreenTags.EmailField),
                 keyboardType = KeyboardType.Email
             )
 
             BasePasswordTextField(
                 state = state.passwordTextState,
                 placeholder = stringResource(Res.string.login_passcode_placeholder),
-                modifier = Modifier.testTag(LoginScreenTags.PasswordField),
             )
         }
 
@@ -154,7 +151,6 @@ fun LoginScreen(
                 onAction(LoginAction.OnLoginClick)
             },
             modifier = Modifier
-                .testTag(LoginScreenTags.SubmitButton)
                 .fillMaxWidth()
                 .padding(top = 18.dp),
             isLoading = state.isSubmitting,
@@ -180,7 +176,6 @@ fun LoginScreen(
         Text(
             text = stringResource(Res.string.login_create_archive_record),
             modifier = Modifier
-                .testTag(LoginScreenTags.RegisterButton)
                 .padding(top = 18.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
