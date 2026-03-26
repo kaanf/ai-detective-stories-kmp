@@ -6,11 +6,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.Font
 import detective_ai_stories.core.designsystem.generated.resources.Res
 import detective_ai_stories.core.designsystem.generated.resources.inter_variable
-import detective_ai_stories.core.designsystem.generated.resources.space_grotesk_bold
 import detective_ai_stories.core.designsystem.generated.resources.special_elite_regular
+import org.jetbrains.compose.resources.Font
 
 val Inter @Composable get() =
     FontFamily(

@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.verification_sent
+package com.kaanf.auth.presentation.emailverification.verificationsent
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -62,50 +62,51 @@ class EmailVerificationSentViewModel(
         }
     }
 
-    private fun resendVerificationSignal() = viewModelScope.launch {
-        val currentState = _state.value
+    private fun resendVerificationSignal() =
+        viewModelScope.launch {
+            val currentState = _state.value
 
-        if (currentState.isResending || !currentState.isResendEnabled) {
-            return@launch
-        }
+            if (currentState.isResending || !currentState.isResendEnabled) {
+                return@launch
+            }
 
-        _state.update {
-            it.copy(
-                isResending = true,
-                isResendEnabled = false,
-            )
-        }
+            _state.update {
+                it.copy(
+                    isResending = true,
+                    isResendEnabled = false,
+                )
+            }
 
-        try {
-            when (val result = authService.resendVerificationMail(email)) {
-                is Result.Success -> {
-                    eventChannel.send(
-                        EmailVerificationSentEvent.Success(
-                            UIText.Resource(Res.string.email_signal_resent),
-                        ),
-                    )
+            try {
+                when (val result = authService.resendVerificationMail(email)) {
+                    is Result.Success -> {
+                        eventChannel.send(
+                            EmailVerificationSentEvent.Success(
+                                UIText.Resource(Res.string.email_signal_resent),
+                            ),
+                        )
 
-                    startResendCountdown()
-                }
-
-                is Result.Failure -> {
-                    _state.update { state ->
-                        state.copy(isResendEnabled = true)
+                        startResendCountdown()
                     }
 
-                    eventChannel.send(
-                        EmailVerificationSentEvent.Failure(
-                            result.error.toUiText(),
-                        ),
-                    )
+                    is Result.Failure -> {
+                        _state.update { state ->
+                            state.copy(isResendEnabled = true)
+                        }
+
+                        eventChannel.send(
+                            EmailVerificationSentEvent.Failure(
+                                result.error.toUiText(),
+                            ),
+                        )
+                    }
+                }
+            } finally {
+                _state.update {
+                    it.copy(isResending = false)
                 }
             }
-        } finally {
-            _state.update {
-                it.copy(isResending = false)
-            }
         }
-    }
 
     private var resendCountdownJob: Job? = null
 
@@ -115,23 +116,24 @@ class EmailVerificationSentViewModel(
 
     private fun startResendCountdown(durationSeconds: Int = RESEND_COUNTDOWN_SECONDS) {
         resendCountdownJob?.cancel()
-        resendCountdownJob = viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    isResendEnabled = false,
-                    resendCountdownSeconds = durationSeconds,
-                )
-            }
-
-            for (remainingSeconds in (durationSeconds - 1) downTo 0) {
-                delay(1_000L)
-                _state.update { state ->
-                    state.copy(
-                        resendCountdownSeconds = remainingSeconds,
-                        isResendEnabled = remainingSeconds == 0,
+        resendCountdownJob =
+            viewModelScope.launch {
+                _state.update {
+                    it.copy(
+                        isResendEnabled = false,
+                        resendCountdownSeconds = durationSeconds,
                     )
                 }
+
+                for (remainingSeconds in (durationSeconds - 1) downTo 0) {
+                    delay(1_000L)
+                    _state.update { state ->
+                        state.copy(
+                            resendCountdownSeconds = remainingSeconds,
+                            isResendEnabled = remainingSeconds == 0,
+                        )
+                    }
+                }
             }
-        }
     }
 }

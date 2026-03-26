@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.verification_result
+package com.kaanf.auth.presentation.emailverification.verificationresult
 
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,14 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kaanf.auth.presentation.email_verification.component.icon.VerificationFailedIcon
-import com.kaanf.auth.presentation.email_verification.component.icon.VerificationSuccessIcon
-import com.kaanf.auth.presentation.email_verification.layout.SimpleActivationLayout
+import com.kaanf.auth.presentation.emailverification.component.icon.VerificationFailedIcon
+import com.kaanf.auth.presentation.emailverification.component.icon.VerificationSuccessIcon
+import com.kaanf.auth.presentation.emailverification.layout.SimpleActivationLayout
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
+import com.kaanf.core.designsystem.component.layout.LoadingScreen
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
-import com.kaanf.core.designsystem.component.layout.LoadingScreen
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.presentation.util.ObserveAsEvents
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
@@ -47,10 +47,12 @@ fun EmailVerificationResultRoot(
             is EmailVerificationResultEvent.Message -> {
                 snackbarHostState.showSnackbar(
                     message = event.message.asStringAsync(),
-                    variant = if (state.phase == EmailVerificationPhase.Verified)
-                        CustomSnackbarVariant.Success
-                    else
-                        CustomSnackbarVariant.Failure,
+                    variant =
+                        if (state.phase == EmailVerificationPhase.Verified) {
+                            CustomSnackbarVariant.Success
+                        } else {
+                            CustomSnackbarVariant.Failure
+                        },
                 )
             }
 
@@ -66,17 +68,19 @@ fun EmailVerificationResultRoot(
                 LoadingScreen(
                     text = stringResource(Res.string.verifying_account),
                     supportingText = stringResource(Res.string.do_not_close_this_window),
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .consumeWindowInsets(innerPadding),
+                    modifier =
+                        Modifier
+                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding),
                 )
             }
 
             EmailVerificationPhase.Failed -> {
                 SimpleActivationLayout(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .consumeWindowInsets(innerPadding),
+                    modifier =
+                        Modifier
+                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding),
                     title = stringResource(Res.string.email_signal_failed_title),
                     signalColor = AccessDefaults.AlertLine,
                     signalTitle = stringResource(Res.string.email_signal_failed_primary),
@@ -88,7 +92,6 @@ fun EmailVerificationResultRoot(
                         BaseButton(
                             text = stringResource(Res.string.email_signal_resend),
                             onClick = {
-
                             },
                             modifier =
                                 Modifier
@@ -104,9 +107,10 @@ fun EmailVerificationResultRoot(
 
             EmailVerificationPhase.Verified -> {
                 SimpleActivationLayout(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .consumeWindowInsets(innerPadding),
+                    modifier =
+                        Modifier
+                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding),
                     title = stringResource(Res.string.email_signal_verified_title),
                     signalColor = AccessDefaults.SuccessLine,
                     signalTitle = stringResource(Res.string.email_signal_verified_primary),

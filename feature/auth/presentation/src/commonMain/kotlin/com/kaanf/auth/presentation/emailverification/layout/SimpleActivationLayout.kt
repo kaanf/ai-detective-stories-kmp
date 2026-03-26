@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.layout
+package com.kaanf.auth.presentation.emailverification.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kaanf.auth.presentation.email_verification.component.VerificationInfoPanel
+import com.kaanf.auth.presentation.emailverification.component.VerificationInfoPanel
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
@@ -52,7 +52,7 @@ fun SimpleActivationLayout(
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             icon()
 
@@ -112,7 +112,7 @@ fun SimpleActivationLayoutPreview() {
             signalDescription = stringResource(Res.string.email_signal_dispatched_secondary),
             onTextClick = {},
             button = {},
-            icon = {}
+            icon = {},
         )
     }
 }

@@ -45,7 +45,6 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.regist
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_return_to_login
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_retype_password_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_screen_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_input_warning_title
 import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_uplink_failure_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -107,11 +106,12 @@ fun RegisterScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(all = 24.dp)
-            .imePadding()
-            .navigationBarsPadding(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(all = 24.dp)
+                .imePadding()
+                .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -121,14 +121,15 @@ fun RegisterScreen(
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
                 text = stringResource(Res.string.register_screen_title),
-                style = AccessTitleTextStyle(
-                    fontSizeSp = 20,
-                    letterSpacingSp = 4.2,
-                ),
+                style =
+                    AccessTitleTextStyle(
+                        fontSizeSp = 20,
+                        letterSpacingSp = 4.2,
+                    ),
             )
 
             Text(
@@ -142,15 +143,16 @@ fun RegisterScreen(
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             BaseTextField(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.register_email_placeholder),
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Email,
             )
 
             BasePasswordTextField(
@@ -169,23 +171,25 @@ fun RegisterScreen(
             onClick = {
                 onAction(RegisterAction.OnRegisterClick)
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 18.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
             isLoading = state.isRegistering,
         )
 
         Text(
             text = stringResource(Res.string.register_return_to_login),
-            modifier = Modifier
-                .padding(top = 28.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = {
-                        onAction(RegisterAction.OnLoginClick)
-                    },
-                ),
+            modifier =
+                Modifier
+                    .padding(top = 28.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            onAction(RegisterAction.OnLoginClick)
+                        },
+                    ),
             style = AccessFooterTextStyle(),
             textAlign = TextAlign.Center,
         )
@@ -197,13 +201,15 @@ fun RegisterScreen(
 private fun RegisterScreenPreview() {
     DetectiveAiStoriesTheme(isDarkTheme = true) {
         RegisterScreen(
-            modifier = Modifier.background(
-                AccessDefaults.PanelBackground
-            ),
-            state = RegisterState(
-                emailTextState = TextFieldState("detective@agency.io"),
-                passwordTextState = TextFieldState("AccessKey9"),
-            ),
+            modifier =
+                Modifier.background(
+                    AccessDefaults.PanelBackground,
+                ),
+            state =
+                RegisterState(
+                    emailTextState = TextFieldState("detective@agency.io"),
+                    passwordTextState = TextFieldState("AccessKey9"),
+                ),
             onAction = {},
         )
     }

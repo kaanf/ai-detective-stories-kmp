@@ -33,7 +33,8 @@ class KtorAuthService(
                 ),
         ) {
             headers.append(
-                "deviceId", deviceIdProvider.getDeviceId()
+                "deviceId",
+                deviceIdProvider.getDeviceId(),
             )
         }
     }
@@ -44,10 +45,11 @@ class KtorAuthService(
     ): Result<AuthInfo, DataError.Remote> {
         return httpClient.post<LoginRequest, AuthInfoSerializable>(
             route = "/auth/login",
-            body = LoginRequest(
-                email = email,
-                password = password
-            )
+            body =
+                LoginRequest(
+                    email = email,
+                    password = password,
+                ),
         ).map { authInfoSerializable ->
             authInfoSerializable.toDomain()
         }

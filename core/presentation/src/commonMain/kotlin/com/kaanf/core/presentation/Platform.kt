@@ -8,6 +8,5 @@ expect fun platform(): String
 @Composable
 fun HelloWorld() {
     Scaffold {
-
     }
 }

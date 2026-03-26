@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
-import com.kaanf.core.designsystem.theme.AccessDefaults
+import androidx.compose.ui.unit.sp
 import com.kaanf.core.designsystem.theme.AccessButtonTextStyle
+import com.kaanf.core.designsystem.theme.AccessDefaults
 
 @Composable
 fun BaseButton(
@@ -46,21 +46,22 @@ fun BaseButton(
         }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(54.dp)
-            .alpha(if (enabled) 1f else 0.5f)
-            .then(backgroundModifier)
-            .border(
-                width = 1.dp,
-                color = if (isLoading) AccessDefaults.LoadingButtonBorder else AccessDefaults.ButtonBorder,
-            )
-            .clickable(
-                enabled = enabled && !isLoading,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick,
-            ),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(54.dp)
+                .alpha(if (enabled) 1f else 0.5f)
+                .then(backgroundModifier)
+                .border(
+                    width = 1.dp,
+                    color = if (isLoading) AccessDefaults.LoadingButtonBorder else AccessDefaults.ButtonBorder,
+                )
+                .clickable(
+                    enabled = enabled && !isLoading,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClick,
+                ),
         contentAlignment = Alignment.Center,
     ) {
         if (isLoading) {

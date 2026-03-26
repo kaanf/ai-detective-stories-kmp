@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.component.icon
+package com.kaanf.auth.presentation.emailverification.component.icon
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size

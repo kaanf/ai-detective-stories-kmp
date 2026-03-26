@@ -30,10 +30,11 @@ class ResultTest {
         var actionCalled = false
         var receivedValue: String? = null
 
-        val returnedResult = result.onSuccess { value ->
-            actionCalled = true
-            receivedValue = value
-        }
+        val returnedResult =
+            result.onSuccess { value ->
+                actionCalled = true
+                receivedValue = value
+            }
 
         assertTrue(actionCalled)
         assertEquals("classified", receivedValue)
@@ -45,9 +46,10 @@ class ResultTest {
         val result: Result<String, TestError> = Result.Failure(TestError.Sample)
         var actionCalled = false
 
-        val returnedResult = result.onSuccess {
-            actionCalled = true
-        }
+        val returnedResult =
+            result.onSuccess {
+                actionCalled = true
+            }
 
         assertFalse(actionCalled)
         assertEquals(Result.Failure(TestError.Sample), returnedResult)
@@ -59,10 +61,11 @@ class ResultTest {
         var actionCalled = false
         var receivedError: TestError? = null
 
-        val returnedResult = result.onFailure { error ->
-            actionCalled = true
-            receivedError = error
-        }
+        val returnedResult =
+            result.onFailure { error ->
+                actionCalled = true
+                receivedError = error
+            }
 
         assertTrue(actionCalled)
         assertEquals(TestError.Sample, receivedError)
@@ -74,9 +77,10 @@ class ResultTest {
         val result = Result.Success("classified")
         var actionCalled = false
 
-        val returnedResult = result.onFailure {
-            actionCalled = true
-        }
+        val returnedResult =
+            result.onFailure {
+                actionCalled = true
+            }
 
         assertFalse(actionCalled)
         assertEquals(Result.Success("classified"), returnedResult)

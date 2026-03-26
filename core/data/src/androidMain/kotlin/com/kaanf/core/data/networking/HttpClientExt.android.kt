@@ -12,6 +12,7 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 actual suspend fun <T> platformSafeCall(
     execute: suspend () -> HttpResponse,
     handleResponse: suspend (HttpResponse) -> Result<T, DataError.Remote>,

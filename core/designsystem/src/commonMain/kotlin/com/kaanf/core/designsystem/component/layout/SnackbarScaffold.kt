@@ -24,9 +24,10 @@ fun SnackbarScaffold(
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AccessDefaults.PanelBackground),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(AccessDefaults.PanelBackground),
     ) {
         Scaffold { innerPadding ->
             content(innerPadding)
@@ -34,16 +35,18 @@ fun SnackbarScaffold(
 
         SnackbarHost(
             hostState = snackbarHostState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .statusBarsPadding()
-                .padding(top = 12.dp, start = 15.dp, end = 15.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(top = 12.dp, start = 15.dp, end = 15.dp),
         ) { snackbarData ->
             CustomSnackbar(
                 snackbarData = snackbarData,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .widthIn(max = 420.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .widthIn(max = 420.dp),
             )
         }
     }

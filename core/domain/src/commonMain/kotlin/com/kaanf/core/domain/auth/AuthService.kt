@@ -12,7 +12,7 @@ interface AuthService {
 
     suspend fun login(
         email: String,
-        password: String
+        password: String,
     ): Result<AuthInfo, DataError.Remote>
 
     suspend fun resendVerificationMail(email: String): EmptyResult<DataError.Remote>

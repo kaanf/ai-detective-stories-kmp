@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.forgot_password
+package com.kaanf.auth.presentation.forgotpassword
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,18 +17,19 @@ class ForgotPasswordViewModel : ViewModel() {
     private var hasLoadedInitialData = false
 
     private val _state = MutableStateFlow(ForgotPasswordState())
-    val state = _state
-        .onStart {
-            if (!hasLoadedInitialData) {
-                /** Load initial data here **/
-                hasLoadedInitialData = true
+    val state =
+        _state
+            .onStart {
+                if (!hasLoadedInitialData) {
+                    /** Load initial data here **/
+                    hasLoadedInitialData = true
+                }
             }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = ForgotPasswordState(),
-        )
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000L),
+                initialValue = ForgotPasswordState(),
+            )
 
     fun onAction(action: ForgotPasswordAction) {
         when (action) {

@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.verification_sent
+package com.kaanf.auth.presentation.emailverification.verificationsent
 
 import com.kaanf.core.presentation.util.UIText
 

@@ -94,6 +94,7 @@ suspend inline fun <reified T> safeCall(noinline execute: suspend () -> HttpResp
     }
 }
 
+@Suppress("SwallowedException")
 suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<T, DataError.Remote> {
     return when (response.status.value) {
         in 200..299 -> {

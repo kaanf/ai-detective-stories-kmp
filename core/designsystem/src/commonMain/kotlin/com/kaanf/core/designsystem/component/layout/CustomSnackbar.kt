@@ -34,8 +34,8 @@ import detective_ai_stories.core.designsystem.generated.resources.snackbar_acces
 import detective_ai_stories.core.designsystem.generated.resources.snackbar_uplink_failure
 import detective_ai_stories.core.designsystem.generated.resources.snackbar_verification_complete
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 enum class CustomSnackbarVariant(
@@ -135,18 +135,19 @@ internal fun CustomSnackbar(
                     text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = AccessLabelTextStyle().copy(
-                        fontSize = 14.sp,
-                        lineHeight = 21.sp,
-                        letterSpacing = 1.3.sp,
-                        color = Color(0xFFE0E0E0),
-                        textAlign = TextAlign.Start,
-                        shadow =
-                            Shadow(
-                                color = Color(0xFFE0E0E0).copy(alpha = 0.35f),
-                                blurRadius = 4f,
-                            ),
-                    ),
+                    style =
+                        AccessLabelTextStyle().copy(
+                            fontSize = 14.sp,
+                            lineHeight = 21.sp,
+                            letterSpacing = 1.3.sp,
+                            color = Color(0xFFE0E0E0),
+                            textAlign = TextAlign.Start,
+                            shadow =
+                                Shadow(
+                                    color = Color(0xFFE0E0E0).copy(alpha = 0.35f),
+                                    blurRadius = 4f,
+                                ),
+                        ),
                 )
             }
 
@@ -154,12 +155,13 @@ internal fun CustomSnackbar(
                 text = snackbarData.visuals.message,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                style = AccessLabelTextStyle().copy(
-                    fontSize = 10.sp,
-                    lineHeight = 14.sp,
-                    color = Color(0xFFE8E8E8),
-                    textAlign = TextAlign.Start
-                ),
+                style =
+                    AccessLabelTextStyle().copy(
+                        fontSize = 10.sp,
+                        lineHeight = 14.sp,
+                        color = Color(0xFFE8E8E8),
+                        textAlign = TextAlign.Start,
+                    ),
             )
         }
     }

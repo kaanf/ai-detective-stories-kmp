@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.component
+package com.kaanf.auth.presentation.emailverification.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,7 +26,7 @@ import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 fun VerificationInfoPanel(
     title: String,
     description: String,
-    color: Color
+    color: Color,
 ) {
     Box(
         modifier =
@@ -39,9 +39,10 @@ fun VerificationInfoPanel(
                 ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
         ) {
             Box(
                 modifier =
@@ -61,20 +62,22 @@ fun VerificationInfoPanel(
             ) {
                 Text(
                     text = title,
-                    style = AccessLabelTextStyle().copy(
-                        letterSpacing = 0.sp,
-                        lineHeight = 22.8.sp
-                    ),
+                    style =
+                        AccessLabelTextStyle().copy(
+                            letterSpacing = 0.sp,
+                            lineHeight = 22.8.sp,
+                        ),
                 )
 
                 Text(
                     text = description,
-                    style = AccessLabelTextStyle().copy(
-                        fontSize = 12.sp,
-                        lineHeight = 19.5.sp,
-                        letterSpacing = 1.2.sp,
-                        color = Color(0xFF555555)
-                    ),
+                    style =
+                        AccessLabelTextStyle().copy(
+                            fontSize = 12.sp,
+                            lineHeight = 19.5.sp,
+                            letterSpacing = 1.2.sp,
+                            color = Color(0xFF555555),
+                        ),
                 )
             }
         }

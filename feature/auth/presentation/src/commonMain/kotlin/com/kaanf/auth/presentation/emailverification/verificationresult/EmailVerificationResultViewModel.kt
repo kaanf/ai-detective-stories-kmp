@@ -1,15 +1,13 @@
-package com.kaanf.auth.presentation.email_verification.verification_result
+package com.kaanf.auth.presentation.emailverification.verificationresult
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaanf.core.domain.auth.AuthService
-import com.kaanf.core.domain.util.Result
 import com.kaanf.core.domain.util.onFailure
 import com.kaanf.core.domain.util.onSuccess
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
-import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,37 +40,11 @@ class EmailVerificationResultViewModel(
         }
     }
 
-    private fun startVerification() = viewModelScope.launch {
-        val token = verificationToken
+    private fun startVerification() =
+        viewModelScope.launch {
+            val token = verificationToken
 
-        if (token.isNullOrBlank()) {
-            _state.update { current ->
-                current.copy(
-                    phase = EmailVerificationPhase.Failed,
-                )
-            }
-
-            eventChannel.send(
-                EmailVerificationResultEvent.Message(
-                    UIText.DynamicString("Verification token is missing."),
-                ),
-            )
-
-            return@launch
-        }
-
-        delay(1000L)
-
-        authService
-            .verifyEmail(token)
-            .onSuccess {
-                _state.update { current ->
-                    current.copy(
-                        phase = EmailVerificationPhase.Verified,
-                    )
-                }
-            }
-            .onFailure { error ->
+            if (token.isNullOrBlank()) {
                 _state.update { current ->
                     current.copy(
                         phase = EmailVerificationPhase.Failed,
@@ -81,9 +53,36 @@ class EmailVerificationResultViewModel(
 
                 eventChannel.send(
                     EmailVerificationResultEvent.Message(
-                        UIText.DynamicString(error.toUiText().toString()),
+                        UIText.DynamicString("Verification token is missing."),
                     ),
                 )
+
+                return@launch
             }
-    }
+
+            delay(1000L)
+
+            authService
+                .verifyEmail(token)
+                .onSuccess {
+                    _state.update { current ->
+                        current.copy(
+                            phase = EmailVerificationPhase.Verified,
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update { current ->
+                        current.copy(
+                            phase = EmailVerificationPhase.Failed,
+                        )
+                    }
+
+                    eventChannel.send(
+                        EmailVerificationResultEvent.Message(
+                            UIText.DynamicString(error.toUiText().toString()),
+                        ),
+                    )
+                }
+        }
 }

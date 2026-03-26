@@ -44,16 +44,18 @@ fun BaseTextField(
         keyboardType = keyboardType,
         minHeight = 46.dp,
         shape = null,
-        borderColor = if (isFocused) {
-            AccessDefaults.FieldFocusedBorder
-        } else {
-            AccessDefaults.FieldBorder
-        },
-        backgroundColor = if (isFocused) {
-            AccessDefaults.FieldFocusedBackground
-        } else {
-            AccessDefaults.FieldBackground
-        },
+        borderColor =
+            if (isFocused) {
+                AccessDefaults.FieldFocusedBorder
+            } else {
+                AccessDefaults.FieldBorder
+            },
+        backgroundColor =
+            if (isFocused) {
+                AccessDefaults.FieldFocusedBackground
+            } else {
+                AccessDefaults.FieldBackground
+            },
         textStyle = AccessFieldTextStyle(),
         placeholderColor = AccessDefaults.FieldPlaceholder,
         bottomAccentColor = if (isFocused) AccessDefaults.AlertLine else Color.Transparent,
@@ -82,7 +84,8 @@ private fun BasicSurfaceField(
 
     Box(modifier = containerModifier) {
         Box(
-            modifier = Modifier.matchParentSize().then(
+            modifier =
+                Modifier.matchParentSize().then(
                     if (shape != null) {
                         Modifier.background(color = backgroundColor, shape = shape)
                             .border(width = 1.dp, color = borderColor, shape = shape)
@@ -120,8 +123,9 @@ private fun BasicSurfaceField(
 
         if (bottomAccentColor != Color.Transparent) {
             Box(
-                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                    .background(bottomAccentColor).height(1.dp),
+                modifier =
+                    Modifier.align(Alignment.BottomCenter).fillMaxWidth()
+                        .background(bottomAccentColor).height(1.dp),
             )
         }
     }

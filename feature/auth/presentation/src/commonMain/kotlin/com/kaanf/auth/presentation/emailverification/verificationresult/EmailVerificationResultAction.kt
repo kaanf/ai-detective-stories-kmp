@@ -1,9 +1,7 @@
-package com.kaanf.auth.presentation.email_verification.verification_result
-
+package com.kaanf.auth.presentation.emailverification.verificationresult
 
 sealed interface EmailVerificationResultAction {
     data object OnReturnToLoginClicked : EmailVerificationResultAction
 
     data object OnResendSignalClicked : EmailVerificationResultAction
 }
-

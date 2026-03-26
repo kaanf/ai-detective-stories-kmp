@@ -6,7 +6,7 @@ object ExternalUriHandler {
     var listener: ((uri: String) -> Unit)? = null
         set(value) {
             field = value
-            if(value != null) {
+            if (value != null) {
                 cached?.let {
                     value.invoke(it)
                 }

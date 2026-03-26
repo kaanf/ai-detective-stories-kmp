@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.forgot_password
+package com.kaanf.auth.presentation.forgotpassword
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kaanf.auth.presentation.email_verification.component.icon.ForgotPasswordLockIcon
+import com.kaanf.auth.presentation.emailverification.component.icon.ForgotPasswordLockIcon
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
@@ -36,9 +36,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ForgotPasswordRoot(
-    viewModel: ForgotPasswordViewModel = viewModel(),
-) {
+fun ForgotPasswordRoot(viewModel: ForgotPasswordViewModel = viewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -50,9 +48,10 @@ fun ForgotPasswordRoot(
 
     SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
         ForgotPasswordScreen(
-            modifier = Modifier
-                .padding(innerPadding)
-                .consumeWindowInsets(innerPadding),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .consumeWindowInsets(innerPadding),
             state = state,
             onAction = viewModel::onAction,
         )
@@ -66,11 +65,12 @@ fun ForgotPasswordScreen(
     onAction: (ForgotPasswordAction) -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(all = 24.dp)
-            .imePadding()
-            .navigationBarsPadding(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(all = 24.dp)
+                .imePadding()
+                .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -86,10 +86,11 @@ fun ForgotPasswordScreen(
         ) {
             Text(
                 text = stringResource(Res.string.lost_credentials),
-                style = AccessTitleTextStyle(
-                    fontSizeSp = 20,
-                    letterSpacingSp = 4.2,
-                ),
+                style =
+                    AccessTitleTextStyle(
+                        fontSizeSp = 20,
+                        letterSpacingSp = 4.2,
+                    ),
             )
 
             Text(
@@ -111,9 +112,10 @@ fun ForgotPasswordScreen(
             text = stringResource(Res.string.lost_credentials_send_resent_link),
             onClick = {
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 18.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
             isLoading = state.isLoading,
         )
     }

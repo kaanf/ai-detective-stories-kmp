@@ -1,4 +1,4 @@
-package com.kaanf.auth.presentation.email_verification.verification_sent
+package com.kaanf.auth.presentation.emailverification.verificationsent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -11,8 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kaanf.auth.presentation.email_verification.component.icon.VerificationMailIcon
-import com.kaanf.auth.presentation.email_verification.layout.SimpleActivationLayout
+import com.kaanf.auth.presentation.emailverification.component.icon.VerificationMailIcon
+import com.kaanf.auth.presentation.emailverification.layout.SimpleActivationLayout
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
@@ -46,8 +46,9 @@ fun EmailVerificationSentRoot(
                 snackbarHostState.showSnackbar(
                     message = event.message.asStringAsync(),
                     variant = CustomSnackbarVariant.Success,
-                    title = UIText.Resource(Res.string.email_signal_dispatched_title)
-                        .asStringAsync(),
+                    title =
+                        UIText.Resource(Res.string.email_signal_dispatched_title)
+                            .asStringAsync(),
                 )
             }
 
@@ -86,10 +87,11 @@ fun EmailVerificationSentScreen(
         modifier = modifier,
         title = stringResource(Res.string.email_signal_dispatched_title),
         signalColor = AccessDefaults.AlertLine,
-        signalTitle = stringResource(
-            Res.string.email_signal_dispatched_primary,
-            state.registeredEmail,
-        ),
+        signalTitle =
+            stringResource(
+                Res.string.email_signal_dispatched_primary,
+                state.registeredEmail,
+            ),
         signalDescription = stringResource(Res.string.email_signal_dispatched_secondary),
         icon = {
             VerificationMailIcon()

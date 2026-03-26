@@ -2,7 +2,6 @@ package com.kaanf.core.designsystem.component.brand
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,18 +21,20 @@ fun SimpleBrandLogo(
     ) {
         Text(
             text = title,
-            style = AccessTitleTextStyle(
-                fontSizeSp = 40,
-                letterSpacingSp = 7.2,
-            ),
+            style =
+                AccessTitleTextStyle(
+                    fontSizeSp = 40,
+                    letterSpacingSp = 7.2,
+                ),
         )
 
         Text(
             text = subtitle,
-            style = AccessTitleTextStyle(
-                fontSizeSp = 20,
-                letterSpacingSp = 4.2,
-            ),
+            style =
+                AccessTitleTextStyle(
+                    fontSizeSp = 20,
+                    letterSpacingSp = 4.2,
+                ),
         )
     }
 }

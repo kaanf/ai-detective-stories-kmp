@@ -20,6 +20,7 @@ import platform.Foundation.NSURLErrorNotConnectedToInternet
 import platform.Foundation.NSURLErrorResourceUnavailable
 import platform.Foundation.NSURLErrorTimedOut
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 actual suspend fun <T> platformSafeCall(
     execute: suspend () -> HttpResponse,
     handleResponse: suspend (HttpResponse) -> Result<T, DataError.Remote>,

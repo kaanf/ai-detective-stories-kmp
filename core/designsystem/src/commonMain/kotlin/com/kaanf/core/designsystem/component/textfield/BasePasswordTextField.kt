@@ -33,10 +33,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFieldTextStyle
-import org.jetbrains.compose.resources.vectorResource
 import detective_ai_stories.core.designsystem.generated.resources.Res
 import detective_ai_stories.core.designsystem.generated.resources.ic_eye
 import detective_ai_stories.core.designsystem.generated.resources.ic_eye_off
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun BasePasswordTextField(
@@ -83,25 +83,27 @@ private fun PasswordFieldSurface(
     showVisibilityToggle: Boolean = true,
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
-    val containerModifier = modifier
-        .fillMaxWidth()
-        .heightIn(min = minHeight)
+    val containerModifier =
+        modifier
+            .fillMaxWidth()
+            .heightIn(min = minHeight)
 
     Box(modifier = containerModifier) {
         Box(
-            modifier = Modifier
-                .matchParentSize()
-                .then(
-                    if (shape != null) {
-                        Modifier
-                            .background(color = backgroundColor, shape = shape)
-                            .border(width = 1.dp, color = borderColor, shape = shape)
-                    } else {
-                        Modifier
-                            .background(color = backgroundColor)
-                            .border(width = 1.dp, color = borderColor)
-                    },
-                ),
+            modifier =
+                Modifier
+                    .matchParentSize()
+                    .then(
+                        if (shape != null) {
+                            Modifier
+                                .background(color = backgroundColor, shape = shape)
+                                .border(width = 1.dp, color = borderColor, shape = shape)
+                        } else {
+                            Modifier
+                                .background(color = backgroundColor)
+                                .border(width = 1.dp, color = borderColor)
+                        },
+                    ),
         ) {
             BasicSecureTextField(
                 state = state,
@@ -114,9 +116,10 @@ private fun PasswordFieldSurface(
                 decorator = { innerTextField ->
                     if (showVisibilityToggle) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
@@ -138,20 +141,22 @@ private fun PasswordFieldSurface(
                                 imageVector = vectorResource(if (isPasswordVisible) Res.drawable.ic_eye_off else Res.drawable.ic_eye),
                                 contentDescription = null,
                                 tint = iconTint,
-                                modifier = Modifier
-                                    .size(18.dp)
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null,
-                                        onClick = { isPasswordVisible = !isPasswordVisible },
-                                    ),
+                                modifier =
+                                    Modifier
+                                        .size(18.dp)
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = null,
+                                            onClick = { isPasswordVisible = !isPasswordVisible },
+                                        ),
                             )
                         }
                     } else {
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
                             contentAlignment = Alignment.CenterStart,
                         ) {
                             if (state.text.isEmpty()) {
@@ -170,11 +175,12 @@ private fun PasswordFieldSurface(
 
         if (bottomAccentColor != Color.Transparent) {
             Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(bottomAccentColor)
-                    .height(1.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(bottomAccentColor)
+                        .height(1.dp),
             )
         }
     }

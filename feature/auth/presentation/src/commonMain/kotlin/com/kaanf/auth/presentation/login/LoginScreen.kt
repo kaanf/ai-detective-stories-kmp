@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.core.designsystem.component.brand.SimpleBrandLogo
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
@@ -39,9 +39,6 @@ import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_badge_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_create_archive_record
@@ -51,6 +48,9 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.login_
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_warning
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_subtitle
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_title
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginRoot(
@@ -82,9 +82,10 @@ fun LoginRoot(
     SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
         LoginScreen(
             state = state,
-            modifier = Modifier
-                .padding(innerPadding)
-                .consumeWindowInsets(innerPadding),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .consumeWindowInsets(innerPadding),
             onAction = viewModel::onAction,
         )
     }
@@ -100,11 +101,12 @@ fun LoginScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(vertical = 24.dp, horizontal = 18.dp)
-            .imePadding()
-            .navigationBarsPadding(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(vertical = 24.dp, horizontal = 18.dp)
+                .imePadding()
+                .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -127,15 +129,16 @@ fun LoginScreen(
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 18.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             BaseTextField(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.login_badge_placeholder),
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Email,
             )
 
             BasePasswordTextField(
@@ -150,38 +153,42 @@ fun LoginScreen(
                 focusManager.clearFocus()
                 onAction(LoginAction.OnLoginClick)
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 18.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
             isLoading = state.isSubmitting,
-            enabled = state.isPasswordValid
+            enabled = state.isPasswordValid,
         )
 
         Text(
             text = stringResource(Res.string.login_lost_credentials),
-            modifier = Modifier
-                .padding(top = 24.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onAction(LoginAction.OnRegisterClick) },
+            modifier =
+                Modifier
+                    .padding(top = 24.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onAction(LoginAction.OnRegisterClick) },
+                    ),
+            style =
+                AccessFooterTextStyle().copy(
+                    color = AccessDefaults.FooterText,
+                    fontSize = 10.sp,
                 ),
-            style = AccessFooterTextStyle().copy(
-                color = AccessDefaults.FooterText,
-                fontSize = 10.sp
-            ),
             textAlign = TextAlign.Center,
         )
 
         Text(
             text = stringResource(Res.string.login_create_archive_record),
-            modifier = Modifier
-                .padding(top = 18.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onAction(LoginAction.OnRegisterClick) },
-                ),
+            modifier =
+                Modifier
+                    .padding(top = 18.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onAction(LoginAction.OnRegisterClick) },
+                    ),
             style = AccessFooterTextStyle(),
             textAlign = TextAlign.Center,
         )
@@ -193,12 +200,14 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     DetectiveAiStoriesTheme(isDarkTheme = true) {
         LoginScreen(
-            modifier = Modifier
-                .background(AccessDefaults.PanelBackground),
-            state = LoginState(
-                emailTextState = TextFieldState("2049-ALPHA"),
-                passwordTextState = TextFieldState("classified"),
-            ),
+            modifier =
+                Modifier
+                    .background(AccessDefaults.PanelBackground),
+            state =
+                LoginState(
+                    emailTextState = TextFieldState("2049-ALPHA"),
+                    passwordTextState = TextFieldState("classified"),
+                ),
             onAction = {},
         )
     }

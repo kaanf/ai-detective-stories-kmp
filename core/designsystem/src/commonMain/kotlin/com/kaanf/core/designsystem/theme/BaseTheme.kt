@@ -52,56 +52,61 @@ fun AccessTitleTextStyle(
 
 @Suppress("ComposableNaming")
 @Composable
-fun AccessLabelTextStyle() = TextStyle(
-    fontFamily = SpecialElite,
-    fontSize = 14.sp,
-    lineHeight = 20.sp,
-    letterSpacing = 1.4.sp,
-    color = AccessDefaults.SupportingText,
-    textAlign = TextAlign.Center,
-)
+fun AccessLabelTextStyle() =
+    TextStyle(
+        fontFamily = SpecialElite,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 1.4.sp,
+        color = AccessDefaults.SupportingText,
+        textAlign = TextAlign.Center,
+    )
 
 @Suppress("ComposableNaming")
 @Composable
-fun AccessButtonTextStyle() = TextStyle(
-    fontFamily = Inter,
-    fontWeight = FontWeight.Medium,
-    fontSize = 14.sp,
-    lineHeight = 20.sp,
-    letterSpacing = 1.4.sp,
-    color = AccessDefaults.HeadingColor,
-    textAlign = TextAlign.Center,
-)
+fun AccessButtonTextStyle() =
+    TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 1.4.sp,
+        color = AccessDefaults.HeadingColor,
+        textAlign = TextAlign.Center,
+    )
 
 @Suppress("ComposableNaming")
 @Composable
-fun AccessSecondaryActionTextStyle() = TextStyle(
-    fontFamily = Inter,
-    fontWeight = FontWeight.Normal,
-    fontSize = 12.sp,
-    lineHeight = 16.sp,
-    letterSpacing = 1.2.sp,
-    color = AccessDefaults.SupportingText,
-    textAlign = TextAlign.Center,
-)
+fun AccessSecondaryActionTextStyle() =
+    TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 1.2.sp,
+        color = AccessDefaults.SupportingText,
+        textAlign = TextAlign.Center,
+    )
 
 @Suppress("ComposableNaming")
 @Composable
-fun AccessFieldTextStyle() = TextStyle(
-    fontFamily = Inter,
-    fontWeight = FontWeight.Normal,
-    fontSize = 14.sp,
-    lineHeight = 20.sp,
-    color = AccessDefaults.FieldText,
-)
+fun AccessFieldTextStyle() =
+    TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        color = AccessDefaults.FieldText,
+    )
 
 @Suppress("ComposableNaming")
 @Composable
-fun AccessFooterTextStyle() = TextStyle(
-    fontFamily = Inter,
-    fontSize = 12.sp,
-    lineHeight = 15.sp,
-    letterSpacing = 1.sp,
-    color = AccessDefaults.SupportingText,
-    textAlign = TextAlign.Center,
-)
+fun AccessFooterTextStyle() =
+    TextStyle(
+        fontFamily = Inter,
+        fontSize = 12.sp,
+        lineHeight = 15.sp,
+        letterSpacing = 1.sp,
+        color = AccessDefaults.SupportingText,
+        textAlign = TextAlign.Center,
+    )

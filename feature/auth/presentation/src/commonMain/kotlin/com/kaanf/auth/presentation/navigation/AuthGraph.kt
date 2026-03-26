@@ -5,8 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
-import com.kaanf.auth.presentation.email_verification.verification_result.EmailVerificationResultRoot
-import com.kaanf.auth.presentation.email_verification.verification_sent.EmailVerificationSentRoot
+import com.kaanf.auth.presentation.emailverification.verificationresult.EmailVerificationResultRoot
+import com.kaanf.auth.presentation.emailverification.verificationsent.EmailVerificationSentRoot
 import com.kaanf.auth.presentation.login.LoginRoot
 import com.kaanf.auth.presentation.register.RegisterRoot
 
@@ -50,18 +50,19 @@ fun NavGraphBuilder.authGraph(
             EmailVerificationSentRoot(
                 onReturnToLoginClick = {
                     navController.popBackStack(AuthGraphRoutes.Login, inclusive = false)
-                }
+                },
             )
         }
         composable<AuthGraphRoutes.EmailVerificationResult>(
-            deepLinks = listOf(
-                navDeepLink {
-                    this.uriPattern = "https://ads.kaanf.com/api/notification/activate-user?token={token}"
-                },
-                navDeepLink {
-                    this.uriPattern = "ads://ads.kaanf.com/api/notification/activate-user?token={token}"
-                },
-            )
+            deepLinks =
+                listOf(
+                    navDeepLink {
+                        this.uriPattern = "https://ads.kaanf.com/api/notification/activate-user?token={token}"
+                    },
+                    navDeepLink {
+                        this.uriPattern = "ads://ads.kaanf.com/api/notification/activate-user?token={token}"
+                    },
+                ),
         ) {
             EmailVerificationResultRoot(
                 onLoginClick = {
@@ -73,7 +74,7 @@ fun NavGraphBuilder.authGraph(
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
             )
         }
     }
