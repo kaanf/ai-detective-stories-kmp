@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.tasks.BaseKtLintCheckTask
 import org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask
@@ -12,8 +14,6 @@ fun BaseKtLintCheckTask.excludeGeneratedSources() {
 }
 
 plugins {
-    // this is necessary to avoid the plugins to be loaded multiple times
-    // in each subproject's classloader
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.compose.hot.reload) apply false
@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt) apply false
 }
 
 configure<KtlintExtension> {
@@ -43,10 +44,19 @@ tasks.withType<KtLintFormatTask>().configureEach {
 
 subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "io.gitlab.arturbosch.detekt")
 
     extensions.configure<KtlintExtension> {
         outputToConsole.set(true)
         ignoreFailures.set(false)
+    }
+
+    extensions.configure<DetektExtension> {
+        config.setFrom(rootProject.files("config/detekt/detekt.yml"))
+        buildUponDefaultConfig = true
+        parallel = true
+        ignoreFailures = true
+        basePath = rootDir.absolutePath
     }
 
     tasks.withType<BaseKtLintCheckTask>().configureEach {
@@ -56,6 +66,17 @@ subprojects {
     tasks.withType<KtLintFormatTask>().configureEach {
         excludeGeneratedSources()
     }
+
+    tasks.withType<Detekt>().configureEach {
+        exclude("**/build/**")
+        exclude("**/generated/**")
+        jvmTarget = "17"
+
+        reports.html.required.set(true)
+        reports.xml.required.set(true)
+        reports.sarif.required.set(true)
+        reports.md.required.set(false)
+    }
 }
 
 tasks.named("ktlintCheck") {
@@ -64,4 +85,48 @@ tasks.named("ktlintCheck") {
 
 tasks.named("ktlintFormat") {
     dependsOn(subprojects.map { "${it.path}:ktlintFormat" })
+}
+
+val aggregatedDetektTaskNames = setOf(
+    "detektMetadataCommonMain",
+    "detektMetadataCommonTest",
+    "detektMetadataIosMain",
+    "detektMetadataIosTest",
+    "detektAndroidDebug",
+    "detektAndroidDebugUnitTest",
+    "detektAndroidDebugAndroidTest",
+)
+
+val detektTask: TaskProvider<Task> = tasks.register("detekt") {
+    group = "verification"
+    description = "Runs detekt for the source sets that contain actual KMP code."
+}
+
+val detektBaselineTask: TaskProvider<Task> = tasks.register("detektBaseline") {
+    group = "verification"
+    description = "Creates detekt baselines for the source sets that contain actual KMP code."
+}
+
+gradle.projectsEvaluated {
+    detektTask.configure {
+        dependsOn(
+            subprojects.flatMap { project ->
+                aggregatedDetektTaskNames.mapNotNull { taskName ->
+                    project.tasks.findByName(taskName)?.path
+                }
+            }
+        )
+    }
+
+    detektBaselineTask.configure {
+        dependsOn(
+            subprojects.flatMap { project ->
+                aggregatedDetektTaskNames.mapNotNull { taskName ->
+                    project.tasks.findByName(
+                        taskName.replace("detekt", "detektBaseline")
+                    )?.path
+                }
+            }
+        )
+    }
 }

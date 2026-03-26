@@ -51,6 +51,7 @@ kermit = "2.0.6"
 squircle-shape = "4.0.0"
 compottie = "2.0.2"
 ktlint-gradle = "12.1.2"
+detekt = "1.23.8"
 
 projectApplicationId = "com.kaanf.detectiveaistories"
 projectVersionName = "1.0"
@@ -213,6 +214,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 [bundles]
 koin-common = [
