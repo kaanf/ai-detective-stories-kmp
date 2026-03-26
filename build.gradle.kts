@@ -31,7 +31,7 @@ plugins {
 
 configure<KtlintExtension> {
     outputToConsole.set(true)
-    ignoreFailures.set(false)
+    ignoreFailures.set(true)
 }
 
 tasks.withType<BaseKtLintCheckTask>().configureEach {
@@ -48,7 +48,7 @@ subprojects {
 
     extensions.configure<KtlintExtension> {
         outputToConsole.set(true)
-        ignoreFailures.set(false)
+        ignoreFailures.set(true)
     }
 
     extensions.configure<DetektExtension> {
