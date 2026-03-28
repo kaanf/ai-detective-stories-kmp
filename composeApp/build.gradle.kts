@@ -18,12 +18,17 @@ kotlin {
             implementation(projects.feature.home.domain)
             implementation(projects.feature.home.presentation)
 
+            implementation(projects.feature.character.data)
+            implementation(projects.feature.character.presentation)
+            implementation(projects.feature.character.domain)
+
             implementation(projects.core.data)
             implementation(projects.core.domain)
             implementation(projects.core.designsystem)
             implementation(projects.core.presentation)
 
             implementation(projects.feature.auth.domain)
+            implementation(projects.feature.auth.data)
             implementation(projects.feature.auth.presentation)
 
             implementation(libs.jetbrains.compose.navigation)

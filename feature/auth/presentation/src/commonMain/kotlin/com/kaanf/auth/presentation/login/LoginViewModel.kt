@@ -2,12 +2,9 @@ package com.kaanf.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaanf.core.domain.auth.AuthInfo
-import com.kaanf.core.domain.auth.AuthService
-import com.kaanf.core.domain.auth.SessionStorage
+import com.kaanf.auth.domain.repository.AuthRepository
+import com.kaanf.core.domain.repository.SessionStorage
 import com.kaanf.core.domain.util.Result
-import com.kaanf.core.domain.util.onFailure
-import com.kaanf.core.domain.util.onSuccess
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
@@ -22,7 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
     private val sessionStorage: SessionStorage
 ) : ViewModel() {
     private val eventChannel = Channel<LoginEvent>()
@@ -85,7 +82,7 @@ class LoginViewModel(
             try {
                 when (
                     val result =
-                        authService.login(
+                        authRepository.login(
                             email = currentState.emailTextState.text.toString(),
                             password = currentState.passwordTextState.text.toString(),
                         )

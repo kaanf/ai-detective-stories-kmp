@@ -3,7 +3,7 @@ package com.kaanf.auth.presentation.emailverification.verificationsent
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaanf.core.domain.auth.AuthService
+import com.kaanf.auth.domain.repository.AuthRepository
 import com.kaanf.core.domain.util.Result
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EmailVerificationSentViewModel(
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val email =
@@ -78,7 +78,7 @@ class EmailVerificationSentViewModel(
             }
 
             try {
-                when (val result = authService.resendVerificationMail(email)) {
+                when (val result = authRepository.resendVerificationMail(email)) {
                     is Result.Success -> {
                         eventChannel.send(
                             EmailVerificationSentEvent.Success(
