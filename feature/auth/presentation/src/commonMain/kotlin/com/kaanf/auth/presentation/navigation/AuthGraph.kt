@@ -26,6 +26,9 @@ fun NavGraphBuilder.authGraph(
                         launchSingleTop = true
                     }
                 },
+                onLoginSuccess = {
+                    onLoginSuccess.invoke()
+                }
             )
         }
         composable<AuthGraphRoutes.Register> {

@@ -1,6 +1,5 @@
 package com.kaanf.core.designsystem.component.layout
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,9 +22,11 @@ import androidx.compose.ui.unit.sp
 import com.kaanf.core.designsystem.component.loading.DualRingLoadingIndicator
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
+import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import detective_ai_stories.core.designsystem.generated.resources.Res
 import detective_ai_stories.core.designsystem.generated.resources.go_back
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoadingScreen(
@@ -39,7 +40,6 @@ fun LoadingScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(AccessDefaults.PanelBackground)
                 .padding(horizontal = 24.dp, vertical = 24.dp),
     ) {
         if (onBackClick != null) {
@@ -113,5 +113,16 @@ fun LoadingScreen(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun LoadingScreenPreview() {
+    DetectiveAiStoriesTheme {
+        LoadingScreen(
+            text = "Yükleniyor",
+            supportingText = "Lütfen bekleyiniz.",
+        )
     }
 }
