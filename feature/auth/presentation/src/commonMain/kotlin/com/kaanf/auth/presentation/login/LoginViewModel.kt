@@ -11,6 +11,7 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_email
 import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_password
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -88,8 +89,8 @@ class LoginViewModel(
                         )
                 ) {
                     is Result.Success -> {
+                        delay(15000)
                         sessionStorage.set(result.data)
-                        eventChannel.send(LoginEvent.Success)
                     }
 
                     is Result.Failure -> {

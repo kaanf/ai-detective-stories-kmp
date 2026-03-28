@@ -1,9 +1,19 @@
+import com.android.build.api.dsl.ApplicationExtension
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+
 plugins {
     alias(libs.plugins.convention.cmp.application)
     alias(libs.plugins.compose.hot.reload)
 }
 
 kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    androidTarget {
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
+    }
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -44,4 +54,21 @@ kotlin {
             implementation(libs.jetbrains.lifecycle.compose)
         }
     }
+}
+
+extensions.configure<ApplicationExtension> {
+    defaultConfig {
+        testInstrumentationRunner = "com.kaanf.detectiveaistories.test.DetectiveAiStoriesTestRunner"
+    }
+}
+
+dependencies {
+    add("androidTestImplementation", platform(libs.androidx.compose.bom))
+    add("androidTestImplementation", libs.androidx.compose.ui.test.junit4.android)
+    add("androidTestImplementation", libs.androidx.runner)
+    add("androidTestImplementation", libs.androidx.junit)
+    add("androidTestImplementation", libs.kotlinx.serialization.json)
+    add("androidTestImplementation", "io.ktor:ktor-client-mock:3.2.3")
+    add("debugImplementation", platform(libs.androidx.compose.bom))
+    add("debugImplementation", libs.androidx.compose.ui.test.manifest)
 }

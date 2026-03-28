@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.core.designsystem.component.brand.SimpleBrandLogo
 import com.kaanf.core.designsystem.component.button.BaseButton
+import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
@@ -38,6 +40,7 @@ import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.TestTags
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_badge_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_create_archive_record
@@ -55,7 +58,6 @@ import org.koin.compose.viewmodel.koinViewModel
 fun LoginRoot(
     viewModel: LoginViewModel = koinViewModel(),
     onRegisterClick: () -> Unit,
-    onLoginSuccess: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -70,7 +72,6 @@ fun LoginRoot(
             }
 
             LoginEvent.Success -> {
-                onLoginSuccess.invoke()
             }
 
             LoginEvent.NavigateToRegister -> {
@@ -99,98 +100,107 @@ fun LoginScreen(
 ) {
     val focusManager = LocalFocusManager.current
 
-    Column(
+    LoadingOverlayLayout(
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(vertical = 24.dp, horizontal = 18.dp)
+                .testTag(TestTags.LOGIN_SCREEN)
                 .imePadding()
                 .navigationBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        isLoading = state.isSubmitting,
     ) {
-        Spacer(
-            modifier = Modifier.weight(1f),
-        )
-
-        SimpleBrandLogo(
-            title = stringResource(Res.string.login_wordmark_title),
-            subtitle = stringResource(Res.string.login_wordmark_subtitle),
-        )
-
-        Spacer(
-            modifier = Modifier.weight(1f),
-        )
-
-        Text(
-            text = stringResource(Res.string.login_warning),
-            style = AccessLabelTextStyle(),
-        )
-
         Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            BaseTextField(
-                state = state.emailTextState,
-                placeholder = stringResource(Res.string.login_badge_placeholder),
-                keyboardType = KeyboardType.Email,
+            Spacer(
+                modifier = Modifier.weight(1f),
             )
 
-            BasePasswordTextField(
-                state = state.passwordTextState,
-                placeholder = stringResource(Res.string.login_passcode_placeholder),
+            SimpleBrandLogo(
+                title = stringResource(Res.string.login_wordmark_title),
+                subtitle = stringResource(Res.string.login_wordmark_subtitle),
+            )
+
+            Spacer(
+                modifier = Modifier.weight(1f),
+            )
+
+            Text(
+                text = stringResource(Res.string.login_warning),
+                style = AccessLabelTextStyle(),
+            )
+
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                BaseTextField(
+                    state = state.emailTextState,
+                    placeholder = stringResource(Res.string.login_badge_placeholder),
+                    keyboardType = KeyboardType.Email,
+                    testTag = TestTags.LOGIN_EMAIL,
+                )
+
+                BasePasswordTextField(
+                    state = state.passwordTextState,
+                    placeholder = stringResource(Res.string.login_passcode_placeholder),
+                    testTag = TestTags.LOGIN_PASSWORD,
+                )
+            }
+
+            BaseButton(
+                text = stringResource(Res.string.login_enter_system),
+                onClick = {
+                    focusManager.clearFocus()
+                    onAction(LoginAction.OnLoginClick)
+                },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.LOGIN_SUBMIT)
+                        .padding(top = 18.dp),
+                isLoading = state.isSubmitting,
+                enabled = state.isPasswordValid,
+            )
+
+            Text(
+                text = stringResource(Res.string.login_lost_credentials),
+                modifier =
+                    Modifier
+                        .padding(top = 24.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onAction(LoginAction.OnRegisterClick) },
+                        ),
+                style =
+                    AccessFooterTextStyle().copy(
+                        color = AccessDefaults.FooterText,
+                        fontSize = 10.sp,
+                    ),
+                textAlign = TextAlign.Center,
+            )
+
+            Text(
+                text = stringResource(Res.string.login_create_archive_record),
+                modifier =
+                    Modifier
+                        .testTag(TestTags.LOGIN_TO_REGISTER)
+                        .padding(top = 18.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onAction(LoginAction.OnRegisterClick) },
+                        ),
+                style = AccessFooterTextStyle(),
+                textAlign = TextAlign.Center,
             )
         }
-
-        BaseButton(
-            text = stringResource(Res.string.login_enter_system),
-            onClick = {
-                focusManager.clearFocus()
-                onAction(LoginAction.OnLoginClick)
-            },
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 18.dp),
-            isLoading = state.isSubmitting,
-            enabled = state.isPasswordValid,
-        )
-
-        Text(
-            text = stringResource(Res.string.login_lost_credentials),
-            modifier =
-                Modifier
-                    .padding(top = 24.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { onAction(LoginAction.OnRegisterClick) },
-                    ),
-            style =
-                AccessFooterTextStyle().copy(
-                    color = AccessDefaults.FooterText,
-                    fontSize = 10.sp,
-                ),
-            textAlign = TextAlign.Center,
-        )
-
-        Text(
-            text = stringResource(Res.string.login_create_archive_record),
-            modifier =
-                Modifier
-                    .padding(top = 18.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { onAction(LoginAction.OnRegisterClick) },
-                    ),
-            style = AccessFooterTextStyle(),
-            textAlign = TextAlign.Center,
-        )
     }
 }
 

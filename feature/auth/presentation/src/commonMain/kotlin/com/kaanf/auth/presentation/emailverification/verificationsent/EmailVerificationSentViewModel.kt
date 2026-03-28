@@ -4,7 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaanf.auth.domain.repository.AuthRepository
+import com.kaanf.auth.presentation.emailverification.verificationresult.EmailVerificationPhase
+import com.kaanf.auth.presentation.emailverification.verificationresult.EmailVerificationResultEvent
 import com.kaanf.core.domain.util.Result
+import com.kaanf.core.domain.util.onFailure
+import com.kaanf.core.domain.util.onSuccess
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
@@ -23,6 +27,8 @@ class EmailVerificationSentViewModel(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private val verificationToken = savedStateHandle.get<String>("token")
+
     private val email =
         savedStateHandle.get<String>("email")
             ?: throw IllegalStateException("No email passed to register success screen")
@@ -47,6 +53,49 @@ class EmailVerificationSentViewModel(
     init {
         startResendCountdown()
     }
+
+
+    private fun startVerification() =
+        viewModelScope.launch {
+            val token = verificationToken
+
+            if (token.isNullOrBlank()) {
+                _state.update { current ->
+                    current.copy(
+                        phase = EmailVerificationPhase.Failed,
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { current ->
+                current.copy(
+                    isVerifying = true
+                )
+            }
+
+            delay(5000L)
+
+            authRepository
+                .verifyEmail(token)
+                .onSuccess {
+                    _state.update { current ->
+                        current.copy(
+                            phase = EmailVerificationPhase.Verified,
+                            isVerifying = false
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update { current ->
+                        current.copy(
+                            phase = EmailVerificationPhase.Failed,
+                            isVerifying = false
+                        )
+                    }
+                }
+        }
 
     fun onAction(action: EmailVerificationSentAction) {
         when (action) {

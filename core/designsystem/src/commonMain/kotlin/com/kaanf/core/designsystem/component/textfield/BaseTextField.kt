@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ fun BaseTextField(
     placeholder: String,
     modifier: Modifier = Modifier,
     keyboardType: KeyboardType = KeyboardType.Text,
+    testTag: String? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -60,6 +62,7 @@ fun BaseTextField(
         placeholderColor = AccessDefaults.FieldPlaceholder,
         bottomAccentColor = if (isFocused) AccessDefaults.AlertLine else Color.Transparent,
         contentPadding = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        testTag = testTag,
     )
 }
 
@@ -79,6 +82,7 @@ private fun BasicSurfaceField(
     shape: androidx.compose.ui.graphics.Shape? = null,
     bottomAccentColor: Color = Color.Transparent,
     contentPadding: Modifier = Modifier.padding(horizontal = 14.dp, vertical = 14.dp),
+    testTag: String? = null,
 ) {
     val containerModifier = modifier.fillMaxWidth().heightIn(min = minHeight)
 
@@ -102,7 +106,16 @@ private fun BasicSurfaceField(
                 textStyle = textStyle,
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 lineLimits = TextFieldLineLimits.SingleLine,
-                modifier = Modifier.fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .then(
+                            if (testTag != null) {
+                                Modifier.testTag(testTag)
+                            } else {
+                                Modifier
+                            },
+                        ),
                 decorator = { innerTextField ->
                     Box(
                         modifier = contentPadding.fillMaxWidth(),

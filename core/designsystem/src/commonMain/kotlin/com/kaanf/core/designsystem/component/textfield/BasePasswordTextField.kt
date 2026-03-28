@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ fun BasePasswordTextField(
     placeholder: String,
     modifier: Modifier = Modifier,
     showVisibilityToggle: Boolean = true,
+    testTag: String? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -62,6 +64,7 @@ fun BasePasswordTextField(
         bottomAccentColor = if (isFocused) AccessDefaults.AlertLine else Color.Transparent,
         iconTint = AccessDefaults.FieldPlaceholder,
         showVisibilityToggle = showVisibilityToggle,
+        testTag = testTag,
     )
 }
 
@@ -81,6 +84,7 @@ private fun PasswordFieldSurface(
     bottomAccentColor: Color = Color.Transparent,
     iconTint: Color = AccessDefaults.FieldPlaceholder,
     showVisibilityToggle: Boolean = true,
+    testTag: String? = null,
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
     val containerModifier =
@@ -112,7 +116,16 @@ private fun PasswordFieldSurface(
                 textStyle = textStyle,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 textObfuscationMode = if (isPasswordVisible) TextObfuscationMode.Visible else TextObfuscationMode.Hidden,
-                modifier = Modifier.fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .then(
+                            if (testTag != null) {
+                                Modifier.testTag(testTag)
+                            } else {
+                                Modifier
+                            },
+                        ),
                 decorator = { innerTextField ->
                     if (showVisibilityToggle) {
                         Row(

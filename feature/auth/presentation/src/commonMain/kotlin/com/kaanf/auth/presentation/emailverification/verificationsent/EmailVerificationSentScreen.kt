@@ -2,6 +2,7 @@ package com.kaanf.auth.presentation.emailverification.verificationsent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.auth.presentation.emailverification.component.icon.VerificationMailIcon
@@ -20,6 +22,7 @@ import com.kaanf.core.designsystem.component.layout.showSnackbar
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.TestTags
 import com.kaanf.core.presentation.util.UIText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_primary
@@ -69,6 +72,8 @@ fun EmailVerificationSentRoot(
         EmailVerificationSentScreen(
             modifier =
                 Modifier
+                    .fillMaxSize()
+                    .testTag(TestTags.LOGIN_SCREEN)
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
             state = state,
