@@ -2,7 +2,7 @@ package com.kaanf.auth.presentation.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaanf.core.domain.auth.AuthService
+import com.kaanf.auth.domain.repository.AuthRepository
 import com.kaanf.core.domain.util.Result
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val eventChannel = Channel<RegisterEvent>()
     val events = eventChannel.receiveAsFlow()
@@ -85,7 +85,7 @@ class RegisterViewModel(
             try {
                 when (
                     val result =
-                        authService.register(
+                        authRepository.register(
                             email = currentState.emailTextState.text.toString(),
                             password = currentState.passwordTextState.text.toString(),
                         )

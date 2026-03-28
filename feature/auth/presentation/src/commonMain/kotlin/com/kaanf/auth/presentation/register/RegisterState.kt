@@ -1,8 +1,8 @@
 package com.kaanf.auth.presentation.register
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.kaanf.core.domain.validation.EmailValidator
-import com.kaanf.core.domain.validation.PasswordValidator
+import com.kaanf.auth.domain.validation.EmailValidator
+import com.kaanf.auth.domain.validation.PasswordValidator
 
 data class RegisterState(
     val emailTextState: TextFieldState = TextFieldState(),

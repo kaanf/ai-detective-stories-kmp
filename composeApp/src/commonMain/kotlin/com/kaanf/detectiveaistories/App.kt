@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.kaanf.auth.presentation.navigation.AuthGraphRoutes
+import com.kaanf.character.presentation.createcharacter.navigation.CharacterGraphRoutes
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.detectiveaistories.navigation.DeepLinkListener
 import com.kaanf.detectiveaistories.navigation.NavigationRoot
@@ -38,10 +39,16 @@ fun App(
         if(!state.isCheckingAuth) {
             NavigationRoot(
                 navController = navController,
-                startDestination = if(state.isLoggedIn) {
-                    HomeGraphRoutes.Graph
-                } else {
-                    AuthGraphRoutes.Graph
+                startDestination = when {
+                    !state.isLoggedIn -> {
+                        AuthGraphRoutes.Graph
+                    }
+                    !state.isCharacterCreated -> {
+                        CharacterGraphRoutes.Graph
+                    }
+                    else -> {
+                        HomeGraphRoutes.Graph
+                    }
                 }
             )
         }
