@@ -21,6 +21,7 @@ class EmailVerificationResultViewModel(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val verificationToken = savedStateHandle.get<String>("token")
+    private var hasNavigatedToLogin = false
 
     private val eventChannel = Channel<EmailVerificationResultEvent>()
     val events
@@ -35,8 +36,10 @@ class EmailVerificationResultViewModel(
 
     fun onAction(action: EmailVerificationResultAction) {
         when (action) {
+            EmailVerificationResultAction.OnReturnToLoginClicked -> {
+
+            }
             EmailVerificationResultAction.OnResendSignalClicked -> TODO()
-            else -> Unit
         }
     }
 

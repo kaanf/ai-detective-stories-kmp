@@ -5,10 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.kaanf.auth.presentation.navigation.AuthGraphRoutes
 import com.kaanf.auth.presentation.navigation.authGraph
 import com.kaanf.character.presentation.createcharacter.navigation.characterGraph
-import com.kaanf.home.presentation.navigation.HomeGraphRoutes
 import com.kaanf.home.presentation.navigation.homeGraph
 
 @Suppress("FunctionNaming")
@@ -47,16 +45,13 @@ fun NavigationRoot(
     ) {
         authGraph(
             navController = navController,
-            onLoginSuccess = {
-                navController.navigate(HomeGraphRoutes.Graph) {
-                    popUpTo(AuthGraphRoutes.Graph) {
-                        inclusive = true
-                    }
-                }
-            },
         )
 
         characterGraph(
+            navController = navController
+        )
+
+        homeGraph(
             navController = navController
         )
     }

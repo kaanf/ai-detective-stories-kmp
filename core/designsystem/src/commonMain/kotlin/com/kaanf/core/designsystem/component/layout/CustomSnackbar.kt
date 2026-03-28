@@ -25,7 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
+import com.kaanf.core.designsystem.theme.AccessMetaTextStyle
 import detective_ai_stories.core.designsystem.generated.resources.Res
 import detective_ai_stories.core.designsystem.generated.resources.ic_snackbar_failure
 import detective_ai_stories.core.designsystem.generated.resources.ic_snackbar_success
@@ -137,8 +139,8 @@ internal fun CustomSnackbar(
                     overflow = TextOverflow.Ellipsis,
                     style =
                         AccessLabelTextStyle().copy(
-                            fontSize = 14.sp,
-                            lineHeight = 21.sp,
+                            fontSize = 15.sp,
+                            lineHeight = 20.sp,
                             letterSpacing = 1.3.sp,
                             color = Color(0xFFE0E0E0),
                             textAlign = TextAlign.Start,
@@ -156,10 +158,10 @@ internal fun CustomSnackbar(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style =
-                    AccessLabelTextStyle().copy(
-                        fontSize = 10.sp,
-                        lineHeight = 14.sp,
-                        color = Color(0xFFE8E8E8),
+                    AccessMetaTextStyle().copy(
+                        fontSize = 11.sp,
+                        lineHeight = 16.sp,
+                        color = AccessDefaults.FieldText,
                         textAlign = TextAlign.Start,
                     ),
             )

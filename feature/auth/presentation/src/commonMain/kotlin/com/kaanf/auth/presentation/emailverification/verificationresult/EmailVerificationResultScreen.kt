@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.auth.presentation.emailverification.component.icon.VerificationFailedIcon
@@ -15,13 +16,13 @@ import com.kaanf.auth.presentation.emailverification.component.icon.Verification
 import com.kaanf.auth.presentation.emailverification.layout.SimpleActivationLayout
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
-import com.kaanf.core.designsystem.component.layout.LoadingScreen
+import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.TestTags
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.do_not_close_this_window
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_primary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_secondary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_title
@@ -30,7 +31,6 @@ import detective_ai_stories.feature.auth.presentation.generated.resources.email_
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_primary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_secondary
 import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.verifying_account
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -65,14 +65,13 @@ fun EmailVerificationResultRoot(
     SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
         when (state.phase) {
             EmailVerificationPhase.Verifying -> {
-                LoadingScreen(
-                    text = stringResource(Res.string.verifying_account),
-                    supportingText = stringResource(Res.string.do_not_close_this_window),
+                LoadingOverlayLayout(
                     modifier =
                         Modifier
                             .padding(innerPadding)
                             .consumeWindowInsets(innerPadding),
-                )
+                    isLoading = true,
+                ) {}
             }
 
             EmailVerificationPhase.Failed -> {
@@ -91,8 +90,7 @@ fun EmailVerificationResultRoot(
                     button = {
                         BaseButton(
                             text = stringResource(Res.string.email_signal_resend),
-                            onClick = {
-                            },
+                            onClick = {},
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
@@ -100,7 +98,7 @@ fun EmailVerificationResultRoot(
                         )
                     },
                     onTextClick = {
-                        onLoginClick.invoke()
+                        viewModel.onAction(EmailVerificationResultAction.OnReturnToLoginClicked)
                     },
                 )
             }
@@ -109,6 +107,7 @@ fun EmailVerificationResultRoot(
                 SimpleActivationLayout(
                     modifier =
                         Modifier
+                            .testTag(TestTags.VERIFICATION_RESULT_VERIFIED_SCREEN)
                             .padding(innerPadding)
                             .consumeWindowInsets(innerPadding),
                     title = stringResource(Res.string.email_signal_verified_title),
@@ -122,11 +121,12 @@ fun EmailVerificationResultRoot(
                         BaseButton(
                             text = stringResource(Res.string.email_signal_verified_create_persona),
                             onClick = {
-                                onLoginClick.invoke()
+                                viewModel.onAction(EmailVerificationResultAction.OnReturnToLoginClicked)
                             },
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
+                                    .testTag(TestTags.VERIFICATION_RESULT_CONTINUE)
                                     .padding(top = 24.dp),
                         )
                     },

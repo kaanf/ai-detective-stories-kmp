@@ -12,6 +12,7 @@ object AccessDefaults {
     val ScreenBackground = Color(0xFF1F1F1F)
     val PanelBackground = Color(0xFF0A0A0A)
     val LoadingScreenBackground = Color(0xFF050303)
+    val LoadingOverlayScrim = Color(0xD6050505)
     val HeadingColor = Color(0xFFE0E0E0)
     val SupportingText = Color(0xFF7A7A7A)
     val FooterText = Color(0xFF555555)
@@ -30,9 +31,10 @@ object AccessDefaults {
     val LoadingButtonBackgroundStart = Color(0xFF141010)
     val LoadingButtonBackgroundEnd = Color(0xFF1B1616)
     val LoadingIndicatorOuterTrack = Color(0xFF222222)
-    val LoadingIndicatorInnerTrack = Color(0xFF111111)
-    val LoadingIndicatorInnerSweep = Color(0xFFE0E0E0)
-    val LoadingIndicatorCore = Color(0xFF8A1C1C)
+    val FingerprintIndicatorIdle = Color(0xFF555555)
+    val FingerprintIndicatorActive = Color(0xFFF6F2E9)
+    val FingerprintIndicatorGlow = Color(0xCCEBE5D6)
+    val FingerprintIndicatorFrame = Color(0xFF333333)
 }
 
 @Suppress("ComposableNaming")
