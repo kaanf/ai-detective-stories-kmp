@@ -8,6 +8,9 @@ data class UserSerializable(
     @SerialName("_id")
     val id: String,
     val email: String,
-    @SerialName("name")
     val fullName: String,
+    @SerialName("profileImage")
+    val profileImageUrl: String,
+    val gameToken: Int,
+    val energy: Int
 )

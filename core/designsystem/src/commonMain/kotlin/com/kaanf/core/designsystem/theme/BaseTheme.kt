@@ -110,3 +110,41 @@ fun AccessFooterTextStyle() =
         color = AccessDefaults.SupportingText,
         textAlign = TextAlign.Center,
     )
+
+// region
+@Suppress("ComposableNaming")
+@Composable
+fun AccessHeaderTextStyle() =
+    TextStyle(
+        fontFamily = FontFamily.Serif,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 4.7.sp,
+        color = AccessDefaults.HeadingColor,
+        textAlign = TextAlign.Center,
+    )
+
+@Suppress("ComposableNaming")
+@Composable
+fun AccessSubtitleTextStyle() =
+    TextStyle(
+        fontFamily = SpecialElite,
+        fontSize = 12.sp,
+        lineHeight = 15.sp,
+        letterSpacing = 1.4.sp,
+        color = AccessDefaults.SupportingText,
+        textAlign = TextAlign.Center,
+    )
+
+@Suppress("ComposableNaming")
+@Composable
+fun AccessMetaTextStyle() =
+    TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Medium,
+        fontSize = 10.sp,
+        lineHeight = 20.sp,
+        color = AccessDefaults.SupportingText,
+    )
+// endregion

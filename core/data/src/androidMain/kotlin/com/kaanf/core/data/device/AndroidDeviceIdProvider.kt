@@ -1,7 +1,9 @@
 package com.kaanf.core.data.device
 
 import android.content.Context
+import com.kaanf.core.domain.provider.DeviceIdProvider
 import java.util.UUID
+import androidx.core.content.edit
 
 private const val DEVICE_PREFS_NAME = "device_prefs"
 private const val DEVICE_ID_KEY = "installation_id"
@@ -20,6 +22,6 @@ fun getAndroidDeviceId(context: Context): String =
         .let { preferences ->
             preferences.getString(DEVICE_ID_KEY, null)
                 ?: UUID.randomUUID().toString().also { generatedId ->
-                    preferences.edit().putString(DEVICE_ID_KEY, generatedId).apply()
+                    preferences.edit { putString(DEVICE_ID_KEY, generatedId) }
                 }
         }

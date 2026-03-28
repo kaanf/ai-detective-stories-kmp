@@ -11,6 +11,7 @@ kotlin {
                 implementation(projects.core.presentation)
 
                 implementation(libs.squircle.shape)
+                implementation(libs.coil.compose)
 
                 /*
                 implementation(libs.compottie)

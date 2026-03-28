@@ -1,9 +1,9 @@
 package com.kaanf.core.data.networking
 
 import com.kaanf.core.data.dto.AuthInfoSerializable
-import com.kaanf.core.data.dto.request.RefreshRequest
+import com.kaanf.core.data.dto.RefreshRequest
 import com.kaanf.core.data.mappers.toDomain
-import com.kaanf.core.domain.auth.SessionStorage
+import com.kaanf.core.domain.repository.SessionStorage
 import com.kaanf.core.domain.logging.DetectiveAiStoriesLogger
 import com.kaanf.core.domain.util.onFailure
 import com.kaanf.core.domain.util.onSuccess

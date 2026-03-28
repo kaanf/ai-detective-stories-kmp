@@ -3,7 +3,7 @@ package com.kaanf.auth.presentation.emailverification.verificationresult
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaanf.core.domain.auth.AuthService
+import com.kaanf.auth.domain.repository.AuthRepository
 import com.kaanf.core.domain.util.onFailure
 import com.kaanf.core.domain.util.onSuccess
 import com.kaanf.core.presentation.util.UIText
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EmailVerificationResultViewModel(
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val verificationToken = savedStateHandle.get<String>("token")
@@ -62,7 +62,7 @@ class EmailVerificationResultViewModel(
 
             delay(1000L)
 
-            authService
+            authRepository
                 .verifyEmail(token)
                 .onSuccess {
                     _state.update { current ->

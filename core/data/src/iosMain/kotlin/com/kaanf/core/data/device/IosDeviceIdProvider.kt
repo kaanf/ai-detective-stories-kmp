@@ -1,5 +1,6 @@
 package com.kaanf.core.data.device
 
+import com.kaanf.core.domain.provider.DeviceIdProvider
 import platform.Foundation.NSUUID
 import platform.Foundation.NSUserDefaults
 
