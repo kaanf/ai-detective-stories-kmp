@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,6 +55,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun LoginRoot(
     viewModel: LoginViewModel = koinViewModel(),
     onRegisterClick: () -> Unit,
+    onLoginSuccess: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -70,11 +70,11 @@ fun LoginRoot(
             }
 
             LoginEvent.Success -> {
-                // Todo: Navigate dashboard.
+                onLoginSuccess.invoke()
             }
 
             LoginEvent.NavigateToRegister -> {
-                onRegisterClick()
+                onRegisterClick.invoke()
             }
         }
     }
@@ -98,7 +98,6 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier =

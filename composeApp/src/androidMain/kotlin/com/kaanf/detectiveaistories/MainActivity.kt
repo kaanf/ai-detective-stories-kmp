@@ -7,19 +7,30 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.kaanf.detectiveaistories.navigation.ExternalUriHandler
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        var isSplashScreenNeeded = true
+        installSplashScreen().setKeepOnScreenCondition {
+            isSplashScreenNeeded
+        }
+
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        dispatchDeepLinkIntent(intent)
+        // dispatchDeepLinkIntent(intent)
 
         setContent {
-            App()
+            App(
+                onAuthenticationChecked = {
+                    isSplashScreenNeeded = false
+                }
+            )
         }
     }
 
+    /*
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -30,6 +41,7 @@ class MainActivity : ComponentActivity() {
         val uri = intent?.dataString ?: return
         ExternalUriHandler.onNewUri(uri)
     }
+     */
 }
 
 @Preview
