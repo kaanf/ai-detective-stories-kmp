@@ -10,6 +10,7 @@ import com.kaanf.auth.presentation.navigation.AuthGraphRoutes
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.detectiveaistories.navigation.DeepLinkListener
 import com.kaanf.detectiveaistories.navigation.NavigationRoot
+import com.kaanf.home.presentation.navigation.HomeGraphRoutes
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -38,7 +39,7 @@ fun App(
             NavigationRoot(
                 navController = navController,
                 startDestination = if(state.isLoggedIn) {
-                    AuthGraphRoutes.Graph
+                    HomeGraphRoutes.Graph
                 } else {
                     AuthGraphRoutes.Graph
                 }

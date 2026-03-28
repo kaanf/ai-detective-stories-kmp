@@ -26,10 +26,11 @@ fun SnackbarScaffold(
     Box(
         modifier =
             modifier
-                .fillMaxSize()
-                .background(AccessDefaults.PanelBackground),
+                .fillMaxSize(),
     ) {
-        Scaffold { innerPadding ->
+        Scaffold(
+            containerColor = AccessDefaults.PanelBackground
+        ) { innerPadding ->
             content(innerPadding)
         }
 

@@ -10,19 +10,23 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val sessionStorage: SessionStorage
-): ViewModel() {
+    private val sessionStorage: SessionStorage,
+) : ViewModel() {
 
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            val authInfo = sessionStorage.observeAuthInfo().firstOrNull()
-            _state.update { it.copy(
+        observeAuthInfo()
+    }
+
+    private fun observeAuthInfo() = viewModelScope.launch {
+        val authInfo = sessionStorage.observeAuthInfo().firstOrNull()
+        _state.update {
+            it.copy(
                 isCheckingAuth = false,
-                isLoggedIn = authInfo != null
-            ) }
+                isLoggedIn = authInfo != null,
+            )
         }
     }
 }
