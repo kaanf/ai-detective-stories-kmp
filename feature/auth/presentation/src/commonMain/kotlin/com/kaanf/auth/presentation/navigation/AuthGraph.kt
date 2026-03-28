@@ -13,7 +13,6 @@ import com.kaanf.auth.presentation.register.RegisterRoot
 
 fun NavGraphBuilder.authGraph(
     navController: NavController,
-    onLoginSuccess: () -> Unit,
 ) {
     navigation<AuthGraphRoutes.Graph>(
         startDestination = AuthGraphRoutes.Login,
@@ -26,9 +25,6 @@ fun NavGraphBuilder.authGraph(
                         launchSingleTop = true
                     }
                 },
-                onLoginSuccess = {
-                    onLoginSuccess.invoke()
-                }
             )
         }
         composable<AuthGraphRoutes.Register> {

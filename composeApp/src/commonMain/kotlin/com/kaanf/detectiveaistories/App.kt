@@ -19,7 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Preview
 fun App(
     viewModel: MainViewModel = koinViewModel(),
-    onAuthenticationChecked: () -> Unit = {}
+    onAuthenticationChecked: () -> Unit = {},
 ) {
     val navController = rememberNavController()
     val isDarkTheme = isSystemInDarkTheme()
@@ -36,20 +36,15 @@ fun App(
     DetectiveAiStoriesTheme(isDarkTheme = true) {
         SystemBarsEffect(isDarkTheme = true)
 
-        if(!state.isCheckingAuth) {
+        if (!state.isCheckingAuth) {
             NavigationRoot(
                 navController = navController,
-                startDestination = when {
-                    !state.isLoggedIn -> {
-                        AuthGraphRoutes.Graph
-                    }
-                    !state.isCharacterCreated -> {
-                        CharacterGraphRoutes.Graph
-                    }
-                    else -> {
-                        HomeGraphRoutes.Graph
-                    }
-                }
+                startDestination =
+                    when {
+                        state.isLoggedIn && state.isCharacterCreated -> HomeGraphRoutes.Graph
+                        state.isLoggedIn -> CharacterGraphRoutes.Graph
+                        else -> AuthGraphRoutes.Graph
+                    },
             )
         }
     }

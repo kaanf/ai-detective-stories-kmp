@@ -20,12 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
+import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
@@ -37,6 +39,7 @@ import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
 import com.kaanf.core.presentation.util.UIText
+import com.kaanf.core.presentation.util.TestTags
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_begin_first_case
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_email_placeholder
@@ -88,27 +91,32 @@ fun RegisterRoot(
     }
 
     SnackbarScaffold(snackbarHostState) { innerPadding ->
-        RegisterScreen(
-            state = state,
+        LoadingOverlayLayout(
             modifier =
                 Modifier
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
-            onAction = viewModel::onAction,
-        )
+            isLoading = state.isRegistering,
+        ) {
+            RegisterScreen(
+                state = state,
+                onAction = viewModel::onAction,
+            )
+        }
     }
 }
 
 @Composable
 fun RegisterScreen(
+    modifier: Modifier = Modifier,
     state: RegisterState,
     onAction: (RegisterAction) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxSize()
+                .testTag(TestTags.REGISTER_SCREEN)
                 .padding(all = 24.dp)
                 .imePadding()
                 .navigationBarsPadding(),
@@ -116,7 +124,7 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Spacer(
-            modifier = Modifier.weight(0.4f),
+            modifier = Modifier.weight(.6f),
         )
 
         Column(
@@ -139,7 +147,7 @@ fun RegisterScreen(
         }
 
         Spacer(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(.5f),
         )
 
         Column(
@@ -153,16 +161,19 @@ fun RegisterScreen(
                 state = state.emailTextState,
                 placeholder = stringResource(Res.string.register_email_placeholder),
                 keyboardType = KeyboardType.Email,
+                testTag = TestTags.REGISTER_EMAIL,
             )
 
             BasePasswordTextField(
                 state = state.passwordTextState,
                 placeholder = stringResource(Res.string.register_password_placeholder),
+                testTag = TestTags.REGISTER_PASSWORD,
             )
 
             BasePasswordTextField(
                 state = state.rePasswordTextState,
                 placeholder = stringResource(Res.string.register_retype_password_placeholder),
+                testTag = TestTags.REGISTER_RE_PASSWORD,
             )
         }
 
@@ -174,6 +185,7 @@ fun RegisterScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
+                    .testTag(TestTags.REGISTER_SUBMIT)
                     .padding(top = 18.dp),
             isLoading = state.isRegistering,
         )
@@ -182,6 +194,7 @@ fun RegisterScreen(
             text = stringResource(Res.string.register_return_to_login),
             modifier =
                 Modifier
+                    .testTag(TestTags.REGISTER_RETURN_TO_LOGIN)
                     .padding(top = 28.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },

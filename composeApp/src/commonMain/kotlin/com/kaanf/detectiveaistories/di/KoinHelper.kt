@@ -6,10 +6,21 @@ import com.kaanf.character.data.di.characterDataModule
 import com.kaanf.character.presentation.di.characterPresentationModule
 import com.kaanf.core.data.di.coreDataModule
 import com.kaanf.home.presentation.di.homePresentationModule
+import org.koin.core.module.Module
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
 fun initKoin(config: KoinAppDeclaration? = null) {
+    initKoin(
+        config = config,
+        additionalModules = emptyList(),
+    )
+}
+
+fun initKoin(
+    config: KoinAppDeclaration? = null,
+    additionalModules: List<Module>,
+) {
     startKoin {
         config?.invoke(this)
         modules(
@@ -20,6 +31,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             characterPresentationModule,
             homePresentationModule,
             appModule,
+            *additionalModules.toTypedArray(),
         )
     }
 }
