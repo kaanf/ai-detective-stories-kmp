@@ -12,7 +12,8 @@ data class CreateCharacterScreenState(
     val selectedAvatarId: String? = null,
     val isAvatarArchiveVisible: Boolean = false,
     val baseTraitValue: Int = 2,
-    val avatars: UserAvatarList = UserAvatarList(images = listOf())
+    val avatars: UserAvatarList = UserAvatarList(images = listOf()),
+    val isLoading: Boolean = false,
 ) {
     val isSubmitEnabled: Boolean
         get() = detectiveNameState.text.toString().trim().isNotEmpty() &&

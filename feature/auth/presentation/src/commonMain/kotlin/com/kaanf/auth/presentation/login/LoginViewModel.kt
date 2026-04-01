@@ -5,11 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.kaanf.auth.domain.repository.AuthRepository
 import com.kaanf.core.domain.repository.SessionStorage
 import com.kaanf.core.domain.util.Result
+import com.kaanf.core.presentation.base.BaseEvent
+import com.kaanf.core.presentation.model.SnackbarMessage
+import com.kaanf.core.presentation.model.SnackbarVariant
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_email
-import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_password
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_snackbar_auth_failed_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_snackbar_invalid_email_description
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_snackbar_invalid_email_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_snackbar_invalid_password_description
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_snackbar_invalid_password_title
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +29,7 @@ class LoginViewModel(
     private val authRepository: AuthRepository,
     private val sessionStorage: SessionStorage
 ) : ViewModel() {
-    private val eventChannel = Channel<LoginEvent>()
+    private val eventChannel = Channel<BaseEvent>()
     val events = eventChannel.receiveAsFlow()
 
     private val _state = MutableStateFlow(LoginState())
@@ -58,8 +64,12 @@ class LoginViewModel(
 
             if (!currentState.isEmailValid) {
                 eventChannel.send(
-                    LoginEvent.Failure(
-                        UIText.Resource(Res.string.error_invalid_email),
+                    BaseEvent.ShowSnackbar(
+                        SnackbarMessage(
+                            title = UIText.Resource(Res.string.login_snackbar_invalid_email_title),
+                            description = UIText.Resource(Res.string.login_snackbar_invalid_email_description),
+                            variant = SnackbarVariant.Failure,
+                        ),
                     ),
                 )
                 return@launch
@@ -67,8 +77,12 @@ class LoginViewModel(
 
             if (!currentState.isPasswordValid) {
                 eventChannel.send(
-                    LoginEvent.Failure(
-                        UIText.Resource(Res.string.error_invalid_password),
+                    BaseEvent.ShowSnackbar(
+                        SnackbarMessage(
+                            title = UIText.Resource(Res.string.login_snackbar_invalid_password_title),
+                            description = UIText.Resource(Res.string.login_snackbar_invalid_password_description),
+                            variant = SnackbarVariant.Failure,
+                        ),
                     ),
                 )
                 return@launch
@@ -89,14 +103,18 @@ class LoginViewModel(
                         )
                 ) {
                     is Result.Success -> {
-                        delay(15000)
+                        delay(20000)
                         sessionStorage.set(result.data)
                     }
 
                     is Result.Failure -> {
                         eventChannel.send(
-                            LoginEvent.Failure(
-                                result.error.toUiText(),
+                            BaseEvent.ShowSnackbar(
+                                SnackbarMessage(
+                                    title = UIText.Resource(Res.string.login_snackbar_auth_failed_title),
+                                    description = result.error.toUiText(),
+                                    variant = SnackbarVariant.Failure,
+                                ),
                             ),
                         )
                     }

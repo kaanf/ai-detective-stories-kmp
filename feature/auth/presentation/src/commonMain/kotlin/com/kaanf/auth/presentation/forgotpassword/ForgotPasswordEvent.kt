@@ -1,3 +1,5 @@
 package com.kaanf.auth.presentation.forgotpassword
 
-sealed interface ForgotPasswordEvent
+import com.kaanf.core.presentation.base.BaseEvent
+
+sealed interface ForgotPasswordEvent : BaseEvent

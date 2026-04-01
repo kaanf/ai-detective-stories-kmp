@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.kaanf.auth.domain.repository.AuthRepository
 import com.kaanf.core.domain.util.onFailure
 import com.kaanf.core.domain.util.onSuccess
+import com.kaanf.core.presentation.base.BaseEvent
+import com.kaanf.core.presentation.model.SnackbarMessage
+import com.kaanf.core.presentation.model.SnackbarVariant
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
 import kotlinx.coroutines.channels.Channel
@@ -23,7 +26,7 @@ class EmailVerificationResultViewModel(
     private val verificationToken = savedStateHandle.get<String>("token")
     private var hasNavigatedToLogin = false
 
-    private val eventChannel = Channel<EmailVerificationResultEvent>()
+    private val eventChannel = Channel<BaseEvent>()
     val events
         get() = eventChannel.receiveAsFlow()
 
@@ -55,8 +58,12 @@ class EmailVerificationResultViewModel(
                 }
 
                 eventChannel.send(
-                    EmailVerificationResultEvent.Message(
-                        UIText.DynamicString("Verification token is missing."),
+                    BaseEvent.ShowSnackbar(
+                        SnackbarMessage(
+                            title = UIText.DynamicString("Verification token is missing."),
+                            description = UIText.DynamicString("Verification token is missing."),
+                            variant = SnackbarVariant.Failure,
+                        ),
                     ),
                 )
 
@@ -82,8 +89,12 @@ class EmailVerificationResultViewModel(
                     }
 
                     eventChannel.send(
-                        EmailVerificationResultEvent.Message(
-                            UIText.DynamicString(error.toUiText().toString()),
+                        BaseEvent.ShowSnackbar(
+                            SnackbarMessage(
+                                title = error.toUiText(),
+                                description = error.toUiText(),
+                                variant = SnackbarVariant.Failure,
+                            ),
                         ),
                     )
                 }

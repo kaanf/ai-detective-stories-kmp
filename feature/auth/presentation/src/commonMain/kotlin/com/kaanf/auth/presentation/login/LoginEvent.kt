@@ -1,11 +1,7 @@
 package com.kaanf.auth.presentation.login
 
-import com.kaanf.core.presentation.util.UIText
+import com.kaanf.core.presentation.base.BaseEvent
 
-sealed interface LoginEvent {
-    data object Success : LoginEvent
-
-    data class Failure(val message: UIText) : LoginEvent
-
+sealed interface LoginEvent : BaseEvent {
     data object NavigateToRegister : LoginEvent
 }

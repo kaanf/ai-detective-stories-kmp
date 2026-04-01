@@ -1,4 +1,7 @@
 package com.kaanf.character.presentation.createcharacter
 
-class CreateCharacterEvent {
+import com.kaanf.core.presentation.base.BaseEvent
+
+sealed interface CreateCharacterEvent: BaseEvent {
+    data object NavigateToHome : CreateCharacterEvent
 }

@@ -4,9 +4,11 @@ import com.kaanf.core.data.session.DataStoreSessionStorage
 import com.kaanf.core.data.logging.KermitLogger
 import com.kaanf.core.data.networking.HttpClientFactory
 import com.kaanf.core.data.repository.UserRepositoryImpl
+import com.kaanf.core.data.repository.UserStoreImpl
 import com.kaanf.core.domain.repository.SessionStorage
 import com.kaanf.core.domain.logging.DetectiveAiStoriesLogger
 import com.kaanf.core.domain.repository.UserRepository
+import com.kaanf.core.domain.repository.UserStore
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -20,6 +22,7 @@ val coreDataModule =
         single<DetectiveAiStoriesLogger> { KermitLogger }
         singleOf(::DataStoreSessionStorage) bind SessionStorage::class
         singleOf(::UserRepositoryImpl) bind UserRepository::class
+        singleOf(::UserStoreImpl) bind UserStore::class
         single {
             HttpClientFactory(
                 get(), get()

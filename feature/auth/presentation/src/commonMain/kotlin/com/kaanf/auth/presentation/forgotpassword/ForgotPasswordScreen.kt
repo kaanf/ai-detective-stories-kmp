@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -21,17 +20,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kaanf.auth.presentation.emailverification.component.icon.ForgotPasswordLockIcon
 import com.kaanf.core.designsystem.component.button.BaseButton
+import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
+import com.kaanf.core.designsystem.component.layout.showSnackbar
+import com.kaanf.core.presentation.base.BaseEvent
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
+import com.kaanf.core.presentation.util.clearFocusOnTap
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.lost_credentials
-import detective_ai_stories.feature.auth.presentation.generated.resources.lost_credentials_description
-import detective_ai_stories.feature.auth.presentation.generated.resources.lost_credentials_send_resent_link
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_email_placeholder
+import detective_ai_stories.feature.auth.presentation.generated.resources.forgot_password_email_placeholder
+import detective_ai_stories.feature.auth.presentation.generated.resources.forgot_password_primary_action_send_reset_link
+import detective_ai_stories.feature.auth.presentation.generated.resources.forgot_password_subtitle
+import detective_ai_stories.feature.auth.presentation.generated.resources.forgot_password_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -42,35 +45,39 @@ fun ForgotPasswordRoot(viewModel: ForgotPasswordViewModel = viewModel()) {
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            else -> Unit
+            is BaseEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(event.snackbarMessage)
+            }
         }
     }
 
     SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
-        ForgotPasswordScreen(
-            modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .consumeWindowInsets(innerPadding),
-            state = state,
-            onAction = viewModel::onAction,
-        )
+        LoadingOverlayLayout(
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding),
+            isLoading = false
+        ) {
+            ForgotPasswordScreen(
+                state = state,
+                onAction = viewModel::onAction,
+            )
+        }
     }
 }
 
 @Composable
 fun ForgotPasswordScreen(
-    modifier: Modifier,
     state: ForgotPasswordState,
     onAction: (ForgotPasswordAction) -> Unit,
 ) {
     Column(
         modifier =
-            modifier
+            Modifier
                 .fillMaxSize()
+                .clearFocusOnTap()
                 .padding(all = 24.dp)
-                .imePadding()
-                .navigationBarsPadding(),
+                .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -85,7 +92,7 @@ fun ForgotPasswordScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = stringResource(Res.string.lost_credentials),
+                text = stringResource(Res.string.forgot_password_title),
                 style =
                     AccessTitleTextStyle(
                         fontSizeSp = 20,
@@ -94,7 +101,7 @@ fun ForgotPasswordScreen(
             )
 
             Text(
-                text = stringResource(Res.string.lost_credentials_description),
+                text = stringResource(Res.string.forgot_password_subtitle),
                 style = AccessLabelTextStyle(),
             )
         }
@@ -105,11 +112,11 @@ fun ForgotPasswordScreen(
 
         BaseTextField(
             state = state.emailTextState,
-            placeholder = stringResource(Res.string.register_email_placeholder),
+            placeholder = stringResource(Res.string.forgot_password_email_placeholder),
         )
 
         BaseButton(
-            text = stringResource(Res.string.lost_credentials_send_resent_link),
+            text = stringResource(Res.string.forgot_password_primary_action_send_reset_link),
             onClick = {
             },
             modifier =
@@ -126,7 +133,6 @@ fun ForgotPasswordScreen(
 private fun ForgotPasswordScreenPreview() {
     DetectiveAiStoriesTheme {
         ForgotPasswordScreen(
-            modifier = Modifier,
             state = ForgotPasswordState(),
             onAction = {},
         )
