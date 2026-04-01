@@ -5,6 +5,7 @@ import com.kaanf.auth.presentation.di.authPresentationModule
 import com.kaanf.character.data.di.characterDataModule
 import com.kaanf.character.presentation.di.characterPresentationModule
 import com.kaanf.core.data.di.coreDataModule
+import com.kaanf.home.data.di.homeDataModule
 import com.kaanf.home.presentation.di.homePresentationModule
 import org.koin.core.module.Module
 import org.koin.core.context.startKoin
@@ -29,6 +30,7 @@ fun initKoin(
             authPresentationModule,
             characterDataModule,
             characterPresentationModule,
+            homeDataModule,
             homePresentationModule,
             appModule,
             *additionalModules.toTypedArray(),

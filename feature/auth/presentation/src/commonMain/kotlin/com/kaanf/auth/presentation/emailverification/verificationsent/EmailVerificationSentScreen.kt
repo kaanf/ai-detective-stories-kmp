@@ -16,21 +16,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.auth.presentation.emailverification.component.icon.VerificationMailIcon
 import com.kaanf.auth.presentation.emailverification.layout.SimpleActivationLayout
 import com.kaanf.core.designsystem.component.button.BaseButton
-import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
+import com.kaanf.core.presentation.base.BaseEvent
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
 import com.kaanf.core.presentation.util.TestTags
-import com.kaanf.core.presentation.util.UIText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_primary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_secondary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resend
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resend_countdown
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resending
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_message_line_1
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_message_line_2
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_primary_action_resend_signal
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_primary_action_resend_signal_with_countdown
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_status_resending
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -45,21 +44,8 @@ fun EmailVerificationSentRoot(
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is EmailVerificationSentEvent.Success -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant = CustomSnackbarVariant.Success,
-                    title =
-                        UIText.Resource(Res.string.email_signal_dispatched_title)
-                            .asStringAsync(),
-                )
-            }
-
-            is EmailVerificationSentEvent.Failure -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant = CustomSnackbarVariant.Warning,
-                )
+            is BaseEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(event.snackbarMessage)
             }
 
             EmailVerificationSentEvent.NavigateToLogin -> {
@@ -73,7 +59,7 @@ fun EmailVerificationSentRoot(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .testTag(TestTags.LOGIN_SCREEN)
+                    .testTag(TestTags.VERIFICATION_SENT_SCREEN)
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
             state = state,
@@ -90,31 +76,31 @@ fun EmailVerificationSentScreen(
 ) {
     SimpleActivationLayout(
         modifier = modifier,
-        title = stringResource(Res.string.email_signal_dispatched_title),
+        title = stringResource(Res.string.verification_mail_sent_title),
         panelColor = AccessDefaults.AlertLine,
         panelTitle =
             stringResource(
-                Res.string.email_signal_dispatched_primary,
+                Res.string.verification_mail_sent_message_line_1,
                 state.registeredEmail,
             ),
-        panelDescription = stringResource(Res.string.email_signal_dispatched_secondary),
+        panelDescription = stringResource(Res.string.verification_mail_sent_message_line_2),
         icon = {
             VerificationMailIcon()
         },
         button = {
             val resendButtonText =
                 if (state.isResendEnabled) {
-                    stringResource(Res.string.email_signal_resend)
+                    stringResource(Res.string.verification_mail_sent_primary_action_resend_signal)
                 } else {
                     stringResource(
-                        Res.string.email_signal_resend_countdown,
+                        Res.string.verification_mail_sent_primary_action_resend_signal_with_countdown,
                         state.resendCountdownSeconds,
                     )
                 }
 
             BaseButton(
                 text = resendButtonText,
-                loadingText = stringResource(Res.string.email_signal_resending),
+                loadingText = stringResource(Res.string.verification_mail_sent_status_resending),
                 onClick = {
                     onAction(EmailVerificationSentAction.OnResendSignalClicked)
                 },

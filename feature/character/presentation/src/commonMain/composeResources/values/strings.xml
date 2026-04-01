@@ -1,0 +1,32 @@
+<resources>
+    <!-- Avatar Sheet -->
+    <string name="avatar_sheet_title">GCPD VISUAL RECORDS ARCHIVE</string>
+    <string name="avatar_sheet_footer_instruction">TERMINAL 409-B // SELECT VISUAL IDENTIFIER // SWIPE DOWN TO ABORT</string>
+
+    <!-- Character Creation - Main -->
+    <string name="character_creation_title">PERSONNEL DOSSIER</string>
+    <string name="character_creation_subtitle">DEPARTMENT OF INVESTIGATIONS // CLASSIFIED</string>
+    <string name="character_creation_primary_action_initialize_dossier">INITIALIZE DOSSIER</string>
+
+    <!-- Character Creation - Avatar -->
+    <string name="character_creation_avatar_section_title">SUBJECT VISUAL RECORD</string>
+    <string name="character_creation_avatar_select">SELECT VISUAL IDENTIFIER</string>
+
+    <!-- Character Creation - Name -->
+    <string name="character_creation_name_label">IDENTITY DESIGNATION</string>
+    <string name="character_creation_name_placeholder">ENTER DETECTIVE NAME...</string>
+
+    <!-- Character Creation - Snackbar -->
+    <string name="character_creation_snackbar_invalid_name_title">INVALID DESIGNATION</string>
+    <string name="character_creation_snackbar_invalid_name_description">The identity designation does not meet registry requirements.</string>
+
+    <string name="character_creation_snackbar_no_avatar_title">VISUAL RECORD MISSING</string>
+    <string name="character_creation_snackbar_no_avatar_description">A visual identifier must be assigned before proceeding.</string>
+
+    <string name="character_creation_snackbar_no_traits_title">PROFILE INCOMPLETE</string>
+    <string name="character_creation_snackbar_no_traits_description">All available traits must be allocated before initialization.</string>
+
+    <string name="character_creation_snackbar_success_title">DOSSIER INITIALIZED</string>
+    <string name="character_creation_snackbar_success_description">Personnel record successfully registered in the archive.</string>
+
+</resources>

@@ -18,4 +18,7 @@ data class RegisterState(
         get() =
             PasswordValidator.validate(passwordTextState.text.toString())
                 .isValidPassword
+
+    val isPasswordMatch: Boolean
+        get() = passwordTextState.text.toString() == rePasswordTextState.text.toString()
 }

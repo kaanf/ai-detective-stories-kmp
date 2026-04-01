@@ -7,13 +7,14 @@ import androidx.navigation.navigation
 import com.kaanf.character.presentation.createcharacter.CreateCharacterRoot
 
 fun NavGraphBuilder.characterGraph(
-    navController: NavController
+    navController: NavController,
+    onNavigateToHome: () -> Unit,
 ) {
     navigation< CharacterGraphRoutes.Graph>(
         startDestination = CharacterGraphRoutes.CreateCharacter
     ) {
         composable<CharacterGraphRoutes.CreateCharacter> {
-            CreateCharacterRoot()
+            CreateCharacterRoot(onNavigateToHome = onNavigateToHome)
         }
     }
 }

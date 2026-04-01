@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.SnackbarHostState
@@ -26,10 +25,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.core.designsystem.component.button.BaseButton
-import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
+import com.kaanf.core.presentation.base.BaseEvent
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
 import com.kaanf.core.designsystem.theme.AccessDefaults
@@ -38,17 +37,16 @@ import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
-import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.TestTags
+import com.kaanf.core.presentation.util.clearFocusOnTap
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_begin_first_case
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_email_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.register_password_placeholder
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_quote
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_return_to_login
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_retype_password_placeholder
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_screen_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_uplink_failure_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_primary_action_begin_first_case
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_re_type_password_placeholder
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_secondary_action_return_to_login
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_subtitle
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -65,23 +63,12 @@ fun RegisterRoot(
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is RegisterEvent.Success -> {
+            is BaseEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(event.snackbarMessage)
+            }
+
+            is RegisterEvent.RegisterSuccess -> {
                 onRegisterSuccess(event.email)
-            }
-
-            is RegisterEvent.Failure -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant = CustomSnackbarVariant.Warning,
-                )
-            }
-
-            is RegisterEvent.Message -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant = CustomSnackbarVariant.Warning,
-                    title = UIText.Resource(Res.string.snackbar_uplink_failure_title).asStringAsync(),
-                )
             }
 
             is RegisterEvent.NavigateToLogin -> {
@@ -90,7 +77,7 @@ fun RegisterRoot(
         }
     }
 
-    SnackbarScaffold(snackbarHostState) { innerPadding ->
+    SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
         LoadingOverlayLayout(
             modifier =
                 Modifier
@@ -116,10 +103,10 @@ fun RegisterScreen(
         modifier =
             modifier
                 .fillMaxSize()
+                .clearFocusOnTap()
                 .testTag(TestTags.REGISTER_SCREEN)
                 .padding(all = 24.dp)
-                .imePadding()
-                .navigationBarsPadding(),
+                .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -132,7 +119,7 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                text = stringResource(Res.string.register_screen_title),
+                text = stringResource(Res.string.register_title),
                 style =
                     AccessTitleTextStyle(
                         fontSizeSp = 20,
@@ -141,7 +128,7 @@ fun RegisterScreen(
             )
 
             Text(
-                text = stringResource(Res.string.register_quote),
+                text = stringResource(Res.string.register_subtitle),
                 style = AccessLabelTextStyle(),
             )
         }
@@ -172,13 +159,13 @@ fun RegisterScreen(
 
             BasePasswordTextField(
                 state = state.rePasswordTextState,
-                placeholder = stringResource(Res.string.register_retype_password_placeholder),
+                placeholder = stringResource(Res.string.register_re_type_password_placeholder),
                 testTag = TestTags.REGISTER_RE_PASSWORD,
             )
         }
 
         BaseButton(
-            text = stringResource(Res.string.register_begin_first_case),
+            text = stringResource(Res.string.register_primary_action_begin_first_case),
             onClick = {
                 onAction(RegisterAction.OnRegisterClick)
             },
@@ -191,7 +178,7 @@ fun RegisterScreen(
         )
 
         Text(
-            text = stringResource(Res.string.register_return_to_login),
+            text = stringResource(Res.string.register_secondary_action_return_to_login),
             modifier =
                 Modifier
                     .testTag(TestTags.REGISTER_RETURN_TO_LOGIN)

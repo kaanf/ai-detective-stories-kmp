@@ -4,15 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaanf.auth.domain.repository.AuthRepository
-import com.kaanf.auth.presentation.emailverification.verificationresult.EmailVerificationPhase
-import com.kaanf.auth.presentation.emailverification.verificationresult.EmailVerificationResultEvent
 import com.kaanf.core.domain.util.Result
-import com.kaanf.core.domain.util.onFailure
-import com.kaanf.core.domain.util.onSuccess
+import com.kaanf.core.presentation.base.BaseEvent
+import com.kaanf.core.presentation.model.SnackbarMessage
+import com.kaanf.core.presentation.model.SnackbarVariant
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resent
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_uplink_failure_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_mail_sent_title
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -33,7 +33,7 @@ class EmailVerificationSentViewModel(
         savedStateHandle.get<String>("email")
             ?: throw IllegalStateException("No email passed to register success screen")
 
-    private val eventChannel = Channel<EmailVerificationSentEvent>()
+    private val eventChannel = Channel<BaseEvent>()
     val events = eventChannel.receiveAsFlow()
 
     private val _state =
@@ -53,49 +53,6 @@ class EmailVerificationSentViewModel(
     init {
         startResendCountdown()
     }
-
-
-    private fun startVerification() =
-        viewModelScope.launch {
-            val token = verificationToken
-
-            if (token.isNullOrBlank()) {
-                _state.update { current ->
-                    current.copy(
-                        phase = EmailVerificationPhase.Failed,
-                    )
-                }
-
-                return@launch
-            }
-
-            _state.update { current ->
-                current.copy(
-                    isVerifying = true
-                )
-            }
-
-            delay(5000L)
-
-            authRepository
-                .verifyEmail(token)
-                .onSuccess {
-                    _state.update { current ->
-                        current.copy(
-                            phase = EmailVerificationPhase.Verified,
-                            isVerifying = false
-                        )
-                    }
-                }
-                .onFailure { error ->
-                    _state.update { current ->
-                        current.copy(
-                            phase = EmailVerificationPhase.Failed,
-                            isVerifying = false
-                        )
-                    }
-                }
-        }
 
     fun onAction(action: EmailVerificationSentAction) {
         when (action) {
@@ -130,8 +87,12 @@ class EmailVerificationSentViewModel(
                 when (val result = authRepository.resendVerificationMail(email)) {
                     is Result.Success -> {
                         eventChannel.send(
-                            EmailVerificationSentEvent.Success(
-                                UIText.Resource(Res.string.email_signal_resent),
+                            BaseEvent.ShowSnackbar(
+                                SnackbarMessage(
+                                    title = UIText.Resource(Res.string.verification_mail_sent_title),
+                                    description = UIText.Resource(Res.string.verification_mail_sent_title),
+                                    variant = SnackbarVariant.Success,
+                                ),
                             ),
                         )
 
@@ -144,8 +105,12 @@ class EmailVerificationSentViewModel(
                         }
 
                         eventChannel.send(
-                            EmailVerificationSentEvent.Failure(
-                                result.error.toUiText(),
+                            BaseEvent.ShowSnackbar(
+                                SnackbarMessage(
+                                    title = UIText.Resource(Res.string.snackbar_uplink_failure_title),
+                                    description = result.error.toUiText(),
+                                    variant = SnackbarVariant.Warning,
+                                ),
                             ),
                         )
                     }

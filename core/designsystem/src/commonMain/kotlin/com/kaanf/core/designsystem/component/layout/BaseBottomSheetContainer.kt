@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -175,10 +176,35 @@ fun BaseBottomSheetContainer(
 private fun BottomSheetHandle(
     modifier: Modifier = Modifier,
 ) {
+    val borderColor = Color(0xFF333333)
     Row(
         modifier =
             modifier
                 .background(AccessDefaults.ButtonBackground)
+                .drawBehind {
+                    val strokeWidth = 1.dp.toPx()
+                    // Top border
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(0f, 0f),
+                        end = Offset(size.width, 0f),
+                        strokeWidth = strokeWidth,
+                    )
+                    // Left border
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(0f, 0f),
+                        end = Offset(0f, size.height),
+                        strokeWidth = strokeWidth,
+                    )
+                    // Right border
+                    drawLine(
+                        color = borderColor,
+                        start = Offset(size.width, 0f),
+                        end = Offset(size.width, size.height),
+                        strokeWidth = strokeWidth,
+                    )
+                }
                 .padding(horizontal = 38.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,

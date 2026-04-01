@@ -1,9 +1,7 @@
 package com.kaanf.auth.presentation.emailverification.verificationresult
 
-import com.kaanf.core.presentation.util.UIText
+import com.kaanf.core.presentation.base.BaseEvent
 
-sealed interface EmailVerificationResultEvent {
-    data class Message(val message: UIText) : EmailVerificationResultEvent
-
+sealed interface EmailVerificationResultEvent : BaseEvent {
     data object NavigateToResult : EmailVerificationResultEvent
 }

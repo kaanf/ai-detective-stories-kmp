@@ -4,11 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaanf.auth.domain.repository.AuthRepository
 import com.kaanf.core.domain.util.Result
+import com.kaanf.core.presentation.base.BaseEvent
+import com.kaanf.core.presentation.model.SnackbarMessage
+import com.kaanf.core.presentation.model.SnackbarVariant
 import com.kaanf.core.presentation.util.UIText
 import com.kaanf.core.presentation.util.toUiText
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
 import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_email
 import detective_ai_stories.feature.auth.presentation.generated.resources.error_invalid_password
+import detective_ai_stories.feature.auth.presentation.generated.resources.error_password_mismatch
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_input_warning_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.snackbar_uplink_failure_title
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +26,7 @@ import kotlinx.coroutines.launch
 class RegisterViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    private val eventChannel = Channel<RegisterEvent>()
+    private val eventChannel = Channel<BaseEvent>()
     val events = eventChannel.receiveAsFlow()
 
     private val _state = MutableStateFlow(RegisterState())
@@ -58,8 +64,26 @@ class RegisterViewModel(
         viewModelScope.launch {
             if (!_state.value.isPasswordValid) {
                 eventChannel.send(
-                    RegisterEvent.Failure(
-                        UIText.Resource(Res.string.error_invalid_password),
+                    BaseEvent.ShowSnackbar(
+                        SnackbarMessage(
+                            title = UIText.Resource(Res.string.snackbar_input_warning_title),
+                            description = UIText.Resource(Res.string.error_invalid_password),
+                            variant = SnackbarVariant.Warning,
+                        ),
+                    ),
+                )
+
+                return@launch
+            }
+
+            if (!_state.value.isPasswordMatch) {
+                eventChannel.send(
+                    BaseEvent.ShowSnackbar(
+                        SnackbarMessage(
+                            title = UIText.Resource(Res.string.snackbar_input_warning_title),
+                            description = UIText.Resource(Res.string.error_password_mismatch),
+                            variant = SnackbarVariant.Warning,
+                        ),
                     ),
                 )
 
@@ -68,8 +92,12 @@ class RegisterViewModel(
 
             if (!_state.value.isEmailValid) {
                 eventChannel.send(
-                    RegisterEvent.Failure(
-                        UIText.Resource(Res.string.error_invalid_email),
+                    BaseEvent.ShowSnackbar(
+                        SnackbarMessage(
+                            title = UIText.Resource(Res.string.snackbar_input_warning_title),
+                            description = UIText.Resource(Res.string.error_invalid_email),
+                            variant = SnackbarVariant.Warning,
+                        ),
                     ),
                 )
 
@@ -92,7 +120,7 @@ class RegisterViewModel(
                 ) {
                     is Result.Success -> {
                         eventChannel.send(
-                            RegisterEvent.Success(
+                            RegisterEvent.RegisterSuccess(
                                 email = currentState.emailTextState.text.toString(),
                             ),
                         )
@@ -100,8 +128,12 @@ class RegisterViewModel(
 
                     is Result.Failure -> {
                         eventChannel.send(
-                            RegisterEvent.Message(
-                                result.error.toUiText(),
+                            BaseEvent.ShowSnackbar(
+                                SnackbarMessage(
+                                    title = UIText.Resource(Res.string.snackbar_uplink_failure_title),
+                                    description = result.error.toUiText(),
+                                    variant = SnackbarVariant.Warning,
+                                ),
                             ),
                         )
                     }

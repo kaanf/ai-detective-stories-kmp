@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.AccessMetaTextStyle
+import com.kaanf.core.designsystem.util.toCustomSnackbarVariant
+import com.kaanf.core.presentation.model.SnackbarMessage
 import detective_ai_stories.core.designsystem.generated.resources.Res
 import detective_ai_stories.core.designsystem.generated.resources.ic_snackbar_failure
 import detective_ai_stories.core.designsystem.generated.resources.ic_snackbar_success
@@ -76,9 +78,9 @@ private data class CustomSnackbarVisuals(
 ) : SnackbarVisuals
 
 suspend fun SnackbarHostState.showSnackbar(
+    title: String? = null,
     message: String,
     variant: CustomSnackbarVariant,
-    title: String? = null,
     duration: SnackbarDuration = SnackbarDuration.Short,
 ): SnackbarResult =
     showSnackbar(
@@ -88,6 +90,20 @@ suspend fun SnackbarHostState.showSnackbar(
                 duration = duration,
                 title = title,
                 variant = variant,
+            ),
+    )
+
+suspend fun SnackbarHostState.showSnackbar(
+    snackbarMessage: SnackbarMessage,
+    duration: SnackbarDuration = SnackbarDuration.Short,
+): SnackbarResult =
+    showSnackbar(
+        visuals =
+            CustomSnackbarVisuals(
+                message = snackbarMessage.description.asStringAsync(),
+                duration = duration,
+                title = snackbarMessage.title.asStringAsync(),
+                variant = snackbarMessage.variant.toCustomSnackbarVariant(),
             ),
     )
 
