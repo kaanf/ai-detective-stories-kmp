@@ -15,22 +15,22 @@ import com.kaanf.auth.presentation.emailverification.component.icon.Verification
 import com.kaanf.auth.presentation.emailverification.component.icon.VerificationSuccessIcon
 import com.kaanf.auth.presentation.emailverification.layout.SimpleActivationLayout
 import com.kaanf.core.designsystem.component.button.BaseButton
-import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
+import com.kaanf.core.presentation.base.BaseEvent
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.presentation.util.ObserveAsEvents
 import com.kaanf.core.presentation.util.TestTags
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_primary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_secondary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_failed_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_resend
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_create_persona
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_primary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_secondary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_verified_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_failed_message_line_1
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_failed_message_line_2
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_failed_primary_action_request_new_link
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_failed_title
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_success_message_line_1
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_success_message_line_2
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_success_primary_action_return_to_login
+import detective_ai_stories.feature.auth.presentation.generated.resources.verification_success_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -44,16 +44,8 @@ fun EmailVerificationResultRoot(
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is EmailVerificationResultEvent.Message -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant =
-                        if (state.phase == EmailVerificationPhase.Verified) {
-                            CustomSnackbarVariant.Success
-                        } else {
-                            CustomSnackbarVariant.Failure
-                        },
-                )
+            is BaseEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(event.snackbarMessage)
             }
 
             EmailVerificationResultEvent.NavigateToResult -> {
@@ -80,16 +72,16 @@ fun EmailVerificationResultRoot(
                         Modifier
                             .padding(innerPadding)
                             .consumeWindowInsets(innerPadding),
-                    title = stringResource(Res.string.email_signal_failed_title),
+                    title = stringResource(Res.string.verification_failed_title),
                     panelColor = AccessDefaults.AlertLine,
-                    panelTitle = stringResource(Res.string.email_signal_failed_primary),
-                    panelDescription = stringResource(Res.string.email_signal_failed_secondary),
+                    panelTitle = stringResource(Res.string.verification_failed_message_line_1),
+                    panelDescription = stringResource(Res.string.verification_failed_message_line_2),
                     icon = {
                         VerificationFailedIcon()
                     },
                     button = {
                         BaseButton(
-                            text = stringResource(Res.string.email_signal_resend),
+                            text = stringResource(Res.string.verification_failed_primary_action_request_new_link),
                             onClick = {},
                             modifier =
                                 Modifier
@@ -110,16 +102,16 @@ fun EmailVerificationResultRoot(
                             .testTag(TestTags.VERIFICATION_RESULT_VERIFIED_SCREEN)
                             .padding(innerPadding)
                             .consumeWindowInsets(innerPadding),
-                    title = stringResource(Res.string.email_signal_verified_title),
+                    title = stringResource(Res.string.verification_success_title),
                     panelColor = AccessDefaults.SuccessLine,
-                    panelTitle = stringResource(Res.string.email_signal_verified_primary),
-                    panelDescription = stringResource(Res.string.email_signal_verified_secondary),
+                    panelTitle = stringResource(Res.string.verification_success_message_line_1),
+                    panelDescription = stringResource(Res.string.verification_success_message_line_2),
                     icon = {
                         VerificationSuccessIcon()
                     },
                     button = {
                         BaseButton(
-                            text = stringResource(Res.string.email_signal_verified_create_persona),
+                            text = stringResource(Res.string.verification_success_primary_action_return_to_login),
                             onClick = {
                                 viewModel.onAction(EmailVerificationResultAction.OnReturnToLoginClicked)
                             },

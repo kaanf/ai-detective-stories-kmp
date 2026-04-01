@@ -18,18 +18,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kaanf.auth.presentation.emailverification.component.VerificationInfoPanel
-import com.kaanf.auth.presentation.emailverification.component.icon.VerificationMailIcon
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.AccessFooterTextStyle
 import com.kaanf.core.designsystem.theme.AccessTitleTextStyle
-import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_primary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_secondary
-import detective_ai_stories.feature.auth.presentation.generated.resources.email_signal_dispatched_title
-import detective_ai_stories.feature.auth.presentation.generated.resources.register_return_to_login
+import detective_ai_stories.feature.auth.presentation.generated.resources.register_secondary_action_return_to_login
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SimpleActivationLayout(
@@ -84,7 +78,7 @@ fun SimpleActivationLayout(
 
         if (onTextClick != null) {
             Text(
-                text = stringResource(Res.string.register_return_to_login),
+                text = stringResource(Res.string.register_secondary_action_return_to_login),
                 modifier =
                     Modifier
                         .align(Alignment.BottomCenter)
@@ -99,23 +93,5 @@ fun SimpleActivationLayout(
                 textAlign = TextAlign.Center,
             )
         }
-    }
-}
-
-@Composable
-@Preview
-fun SimpleActivationLayoutPreview() {
-    DetectiveAiStoriesTheme {
-        SimpleActivationLayout(
-            title = stringResource(Res.string.email_signal_dispatched_title),
-            panelColor = AccessDefaults.AlertLine,
-            panelTitle = stringResource(Res.string.email_signal_dispatched_primary),
-            panelDescription = stringResource(Res.string.email_signal_dispatched_secondary),
-            onTextClick = {},
-            button = {},
-            icon = {
-                VerificationMailIcon()
-            },
-        )
     }
 }

@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <!-- Dashboard - Header -->
+    <string name="dashboard_agency_lead">AGENCY LEAD</string>
+    <string name="dashboard_energy_suffix">ENG</string>
+    <string name="dashboard_gold_suffix">GLD</string>
 
+    <!-- Dashboard - Cases -->
+    <string name="dashboard_active_cases">ACTIVE CASES</string>
+    <string name="dashboard_live_feed">LIVE FEED</string>
+    <string name="dashboard_case_file_prefix">FILE: %1$s</string>
+    <string name="dashboard_case_client_prefix">CLIENT: %1$s</string>
+    <string name="dashboard_case_status_open">OPEN</string>
+    <string name="dashboard_case_status_classified">CLASSIFIED</string>
+    <string name="dashboard_case_cost">COST:</string>
+    <string name="dashboard_case_bounty">BOUNTY:</string>
 </resources>

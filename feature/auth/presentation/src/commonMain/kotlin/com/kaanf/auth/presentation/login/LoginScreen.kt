@@ -1,6 +1,5 @@
 package com.kaanf.auth.presentation.login
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.SnackbarHostState
@@ -30,9 +28,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaanf.core.designsystem.component.brand.SimpleBrandLogo
 import com.kaanf.core.designsystem.component.button.BaseButton
 import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
-import com.kaanf.core.designsystem.component.layout.CustomSnackbarVariant
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.component.layout.showSnackbar
+import com.kaanf.core.presentation.base.BaseEvent
 import com.kaanf.core.designsystem.component.textfield.BasePasswordTextField
 import com.kaanf.core.designsystem.component.textfield.BaseTextField
 import com.kaanf.core.designsystem.theme.AccessDefaults
@@ -41,13 +39,14 @@ import com.kaanf.core.designsystem.theme.AccessLabelTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.presentation.util.ObserveAsEvents
 import com.kaanf.core.presentation.util.TestTags
+import com.kaanf.core.presentation.util.clearFocusOnTap
 import detective_ai_stories.feature.auth.presentation.generated.resources.Res
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_badge_placeholder
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_create_archive_record
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_enter_system
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_lost_credentials
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_badge_number_placeholder
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_passcode_placeholder
-import detective_ai_stories.feature.auth.presentation.generated.resources.login_warning
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_primary_action_enter_system
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_secondary_action_create_archive_record
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_secondary_action_lost_credentials
+import detective_ai_stories.feature.auth.presentation.generated.resources.login_status_unauthorized_access_detected
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_subtitle
 import detective_ai_stories.feature.auth.presentation.generated.resources.login_wordmark_title
 import org.jetbrains.compose.resources.stringResource
@@ -64,14 +63,8 @@ fun LoginRoot(
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is LoginEvent.Failure -> {
-                snackbarHostState.showSnackbar(
-                    message = event.message.asStringAsync(),
-                    variant = CustomSnackbarVariant.Failure,
-                )
-            }
-
-            LoginEvent.Success -> {
+            is BaseEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(event.snackbarMessage)
             }
 
             LoginEvent.NavigateToRegister -> {
@@ -81,126 +74,124 @@ fun LoginRoot(
     }
 
     SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
-        LoginScreen(
-            state = state,
+        LoadingOverlayLayout(
             modifier =
                 Modifier
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
-            onAction = viewModel::onAction,
-        )
+            isLoading = state.isSubmitting,
+        ) {
+            LoginScreen(
+                state = state,
+                onAction = viewModel::onAction,
+            )
+        }
     }
 }
 
 @Composable
-fun LoginScreen(
+private fun LoginScreen(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
 
-    LoadingOverlayLayout(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .testTag(TestTags.LOGIN_SCREEN)
-                .imePadding()
-                .navigationBarsPadding(),
-        isLoading = state.isSubmitting,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .clearFocusOnTap()
+            .testTag(TestTags.LOGIN_SCREEN)
+            .padding(all = 24.dp)
+            .imePadding(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
+        Spacer(
+            modifier = Modifier.weight(1f),
+        )
+
+        SimpleBrandLogo(
+            title = stringResource(Res.string.login_wordmark_title),
+            subtitle = stringResource(Res.string.login_wordmark_subtitle),
+        )
+
+        Spacer(
+            modifier = Modifier.weight(1f),
+        )
+
+        Text(
+            text = stringResource(Res.string.login_status_unauthorized_access_detected),
+            style = AccessLabelTextStyle(),
+        )
+
         Column(
-            modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Spacer(
-                modifier = Modifier.weight(1f),
+            BaseTextField(
+                state = state.emailTextState,
+                placeholder = stringResource(Res.string.login_badge_number_placeholder),
+                keyboardType = KeyboardType.Email,
+                testTag = TestTags.LOGIN_EMAIL,
             )
 
-            SimpleBrandLogo(
-                title = stringResource(Res.string.login_wordmark_title),
-                subtitle = stringResource(Res.string.login_wordmark_subtitle),
-            )
-
-            Spacer(
-                modifier = Modifier.weight(1f),
-            )
-
-            Text(
-                text = stringResource(Res.string.login_warning),
-                style = AccessLabelTextStyle(),
-            )
-
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 18.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                BaseTextField(
-                    state = state.emailTextState,
-                    placeholder = stringResource(Res.string.login_badge_placeholder),
-                    keyboardType = KeyboardType.Email,
-                    testTag = TestTags.LOGIN_EMAIL,
-                )
-
-                BasePasswordTextField(
-                    state = state.passwordTextState,
-                    placeholder = stringResource(Res.string.login_passcode_placeholder),
-                    testTag = TestTags.LOGIN_PASSWORD,
-                )
-            }
-
-            BaseButton(
-                text = stringResource(Res.string.login_enter_system),
-                onClick = {
-                    focusManager.clearFocus()
-                    onAction(LoginAction.OnLoginClick)
-                },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.LOGIN_SUBMIT)
-                        .padding(top = 18.dp),
-                isLoading = state.isSubmitting,
-                enabled = state.isPasswordValid,
-            )
-
-            Text(
-                text = stringResource(Res.string.login_lost_credentials),
-                modifier =
-                    Modifier
-                        .padding(top = 24.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { onAction(LoginAction.OnRegisterClick) },
-                        ),
-                style =
-                    AccessFooterTextStyle().copy(
-                        color = AccessDefaults.FooterText,
-                        fontSize = 10.sp,
-                    ),
-                textAlign = TextAlign.Center,
-            )
-
-            Text(
-                text = stringResource(Res.string.login_create_archive_record),
-                modifier =
-                    Modifier
-                        .testTag(TestTags.LOGIN_TO_REGISTER)
-                        .padding(top = 18.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { onAction(LoginAction.OnRegisterClick) },
-                        ),
-                style = AccessFooterTextStyle(),
-                textAlign = TextAlign.Center,
+            BasePasswordTextField(
+                state = state.passwordTextState,
+                placeholder = stringResource(Res.string.login_passcode_placeholder),
+                testTag = TestTags.LOGIN_PASSWORD,
             )
         }
+
+        BaseButton(
+            text = stringResource(Res.string.login_primary_action_enter_system),
+            onClick = {
+                focusManager.clearFocus()
+                onAction(LoginAction.OnLoginClick)
+            },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.LOGIN_SUBMIT)
+                    .padding(top = 18.dp),
+            isLoading = state.isSubmitting,
+            enabled = state.isPasswordValid,
+        )
+
+        Text(
+            text = stringResource(Res.string.login_secondary_action_lost_credentials),
+            modifier =
+                Modifier
+                    .padding(top = 24.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onAction(LoginAction.OnRegisterClick) },
+                    ),
+            style =
+                AccessFooterTextStyle().copy(
+                    color = AccessDefaults.FooterText,
+                    fontSize = 10.sp,
+                ),
+            textAlign = TextAlign.Center,
+        )
+
+        Text(
+            text = stringResource(Res.string.login_secondary_action_create_archive_record),
+            modifier =
+                Modifier
+                    .testTag(TestTags.LOGIN_TO_REGISTER)
+                    .padding(top = 18.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onAction(LoginAction.OnRegisterClick) },
+                    ),
+            style = AccessFooterTextStyle(),
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -209,9 +200,6 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     DetectiveAiStoriesTheme(isDarkTheme = true) {
         LoginScreen(
-            modifier =
-                Modifier
-                    .background(AccessDefaults.PanelBackground),
             state =
                 LoginState(
                     emailTextState = TextFieldState("2049-ALPHA"),

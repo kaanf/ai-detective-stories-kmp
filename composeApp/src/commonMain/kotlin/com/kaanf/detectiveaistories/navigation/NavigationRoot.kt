@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.kaanf.auth.presentation.navigation.authGraph
 import com.kaanf.character.presentation.createcharacter.navigation.characterGraph
+import com.kaanf.home.presentation.navigation.HomeGraphRoutes
 import com.kaanf.home.presentation.navigation.homeGraph
 
 @Suppress("FunctionNaming")
@@ -48,7 +49,13 @@ fun NavigationRoot(
         )
 
         characterGraph(
-            navController = navController
+            navController = navController,
+            onNavigateToHome = {
+                navController.navigate(HomeGraphRoutes.Graph) {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
         )
 
         homeGraph(

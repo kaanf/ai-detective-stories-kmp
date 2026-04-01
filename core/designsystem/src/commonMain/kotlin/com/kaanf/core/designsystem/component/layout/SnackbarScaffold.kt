@@ -1,11 +1,14 @@
 package com.kaanf.core.designsystem.component.layout
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Scaffold
@@ -29,7 +32,9 @@ fun SnackbarScaffold(
                 .fillMaxSize(),
     ) {
         Scaffold(
-            containerColor = AccessDefaults.PanelBackground
+            containerColor = AccessDefaults.PanelBackground,
+            contentWindowInsets = WindowInsets.safeDrawing
+                .exclude(WindowInsets.ime),
         ) { innerPadding ->
             content(innerPadding)
         }

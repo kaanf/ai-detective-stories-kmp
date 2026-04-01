@@ -3,6 +3,7 @@ package com.kaanf.auth.presentation.forgotpassword
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaanf.auth.domain.repository.AuthRepository
+import com.kaanf.core.presentation.base.BaseEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 class ForgotPasswordViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    private val eventChannel = Channel<ForgotPasswordEvent>()
+    private val eventChannel = Channel<BaseEvent>()
     val events
         get() = eventChannel.receiveAsFlow()
 
