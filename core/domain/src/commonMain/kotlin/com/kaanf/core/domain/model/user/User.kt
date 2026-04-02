@@ -5,7 +5,7 @@ data class User(
     val email: String,
     val fullName: String? = null,
     val profileImageUrl: String,
-    val gameToken: Int,
+    val gold: Int,
     val energy: Int
 ) {
     val isCharacterCreated: Boolean

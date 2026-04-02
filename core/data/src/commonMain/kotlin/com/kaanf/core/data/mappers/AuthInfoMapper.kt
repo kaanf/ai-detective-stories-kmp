@@ -9,7 +9,7 @@ fun AuthInfoSerializable.toDomain(): AuthInfo {
     return AuthInfo(
         accessToken = accessToken,
         refreshToken = refreshToken,
-        user = user?.toDomain()
+        user = user?.toDomain(),
     )
 }
 
@@ -18,9 +18,9 @@ fun UserSerializable.toDomain(): User {
         id = id,
         email = email,
         fullName = fullName,
-        profileImageUrl = profileImageUrl,
-        gameToken = gameToken,
-        energy = energy
+        profileImageUrl = profileImageUrl.toProfileImageUrl(),
+        gold = gameToken,
+        energy = energy,
     )
 }
 
@@ -29,9 +29,9 @@ fun User.toSerializable(): UserSerializable {
         id = id,
         email = email,
         fullName = fullName,
-        profileImageUrl = profileImageUrl,
-        gameToken = gameToken,
-        energy = energy
+        profileImageUrl = profileImageUrl.toProfileImageSuffix(),
+        gameToken = gold,
+        energy = energy,
     )
 }
 
@@ -39,6 +39,6 @@ fun AuthInfo.toSerializable(): AuthInfoSerializable {
     return AuthInfoSerializable(
         accessToken = accessToken,
         refreshToken = refreshToken,
-        user = user?.toSerializable()
+        user = user?.toSerializable(),
     )
 }

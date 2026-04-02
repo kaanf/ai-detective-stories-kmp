@@ -23,3 +23,5 @@ captures
 node_modules/
 DerivedData/
 
+CLAUDE.md
+.claude/*

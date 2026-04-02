@@ -2,8 +2,9 @@
 <resources>
     <!-- Dashboard - Header -->
     <string name="dashboard_agency_lead">AGENCY LEAD</string>
-    <string name="dashboard_energy_suffix">ENG</string>
-    <string name="dashboard_gold_suffix">GLD</string>
+    <string name="dashboard_energy_suffix">Energy</string>
+    <string name="dashboard_gold_suffix">Gold</string>
+    <string name="dashboard_name_suffix">DET. %1$s</string>
 
     <!-- Dashboard - Cases -->
     <string name="dashboard_active_cases">ACTIVE CASES</string>
@@ -14,4 +15,42 @@
     <string name="dashboard_case_status_classified">CLASSIFIED</string>
     <string name="dashboard_case_cost">COST:</string>
     <string name="dashboard_case_bounty">BOUNTY:</string>
+
+    <!-- Dashboard - Empty State -->
+    <string name="dashboard_code_204">CODE: 204</string>
+    <string name="dashboard_empty_title">NO ACTIVE CASE FILES</string>
+    <string name="dashboard_empty_description">No open investigations are currently assigned. \nConsult the secretary for further instructions.</string>
+    <string name="dashboard_empty_status_label">SYSTEM STATUS:</string>
+    <string name="dashboard_empty_status_value">STANDBY</string>
+
+    <!-- Pub -->
+    <string name="pub_back_button">SOKAKLARA DÖN</string>
+    <string name="pub_requirement_label">GEREKSİNİM</string>
+    <string name="pub_requirement_unit">Aksiyon</string>
+
+    <!-- Bottom Navigation -->
+    <string name="bottom_nav_dashboard">HOME</string>
+    <string name="bottom_nav_informants">INFORMANTS</string>
+    <string name="bottom_nav_dispatch">DISPATCH</string>
+    <string name="bottom_nav_pub">PUB</string>
+    <string name="bottom_nav_profile">PROFILE</string>
+
+    <!-- Dispatch / Incoming Cases -->
+    <string name="dispatch_title">INCOMING\nREPORTS</string>
+    <string name="dispatch_description">The city never sleeps, detective. \n\nNew bloodstained reports arrive at central every hour. If you fail to claim them in time, these files are left to decay in the dusty shelves of the archive.</string>
+    <string name="dispatch_primary_action_back">RETURN TO DESK</string>
+    <string name="dispatch_status_comm_channel_open">COMM CHANNEL: OPEN</string>
+    <string name="dispatch_countdown_label">TIME REMAINING FOR NEW FILES</string>
+    <!-- Case Card -->
+    <string name="case_placeholder_description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+    <string name="case_location_industrial_zone">INDUSTRIAL ZONE</string>
+    <string name="case_title_gasp_and_strike">GASP AND STRIKE</string>
+    <string name="case_description_gasp_and_strike">"A blood-soaked handbag... Only a broken wristwatch was found beside the body."</string>
+    <string name="case_location_cobblestone_street">COBBLESTONE STREET</string>
+    <string name="case_title_missing_person">MISSING PERSON</string>
+    <string name="case_description_missing_person">"The entire place reduced to ash. But the fire report states it didn’t start from outside, but within."</string>
+    <string name="case_reward_label">REWARD:</string>
+    <string name="case_reward_gold">%1$d GLD</string>
+    <string name="case_primary_action_assign">CLAIM CASE</string>
+    <string name="case_difficulty_label">DIFFICULTY</string>
 </resources>

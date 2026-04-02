@@ -7,10 +7,14 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.bundles.ktor.common)
+                implementation(libs.koin.core)
+                implementation(libs.datastore)
+                implementation(libs.datastore.preferences)
 
+                implementation(projects.core.data)
                 implementation(projects.core.domain)
                 implementation(projects.feature.home.domain)
-                implementation(projects.feature.home.db)
             }
         }
 
