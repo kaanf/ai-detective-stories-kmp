@@ -120,8 +120,6 @@ class CreateCharacterScreenViewModel(
             currentUser.copy(
                 fullName = currentState.detectiveNameState.text.toString().trim(),
                 profileImageUrl = currentState.selectedAvatar?.avatarImageUrl
-                    ?.substringAfterLast("/")
-                    ?.substringBeforeLast(".")
                     ?: currentUser.profileImageUrl,
             ),
         )

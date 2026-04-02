@@ -103,7 +103,7 @@ class LoginViewModel(
                         )
                 ) {
                     is Result.Success -> {
-                        delay(20000)
+                        delay(2000)
                         sessionStorage.set(result.data)
                     }
 
