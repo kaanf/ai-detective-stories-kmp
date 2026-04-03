@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kaanf.auth.presentation.navigation.AuthGraphRoutes
 import com.kaanf.character.presentation.createcharacter.navigation.CharacterGraphRoutes
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
+import com.kaanf.core.presentation.util.ObserveAsEvents
 import com.kaanf.detectiveaistories.navigation.DeepLinkListener
 import com.kaanf.detectiveaistories.navigation.NavigationRoot
 import com.kaanf.home.presentation.navigation.HomeGraphRoutes
@@ -30,6 +31,18 @@ fun App(
     LaunchedEffect(state.isCheckingAuth) {
         if (!state.isCheckingAuth) {
             onAuthenticationChecked()
+        }
+    }
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            is MainEvent.OnSessionExpired -> {
+                navController.navigate(AuthGraphRoutes.Graph) {
+                    popUpTo(AuthGraphRoutes.Graph) {
+                        inclusive = false
+                    }
+                }
+            }
         }
     }
 
