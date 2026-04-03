@@ -19,8 +19,9 @@ fun UserSerializable.toDomain(): User {
         email = email,
         fullName = fullName,
         profileImageUrl = profileImageUrl.toProfileImageUrl(),
-        gold = gameToken,
+        gold = gold,
         energy = energy,
+        xp = xp
     )
 }
 
@@ -30,10 +31,13 @@ fun User.toSerializable(): UserSerializable {
         email = email,
         fullName = fullName,
         profileImageUrl = profileImageUrl.toProfileImageSuffix(),
-        gameToken = gold,
+        gold = gold,
         energy = energy,
+        xp = xp,
     )
 }
+
+// Her saat başı +5 veriliyor.
 
 fun AuthInfo.toSerializable(): AuthInfoSerializable {
     return AuthInfoSerializable(

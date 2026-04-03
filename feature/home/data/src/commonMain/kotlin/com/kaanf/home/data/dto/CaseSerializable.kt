@@ -5,14 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CaseSerializable(
-    @SerialName("_id")
     val id: String,
     val title: String,
-    val description: String,
     val difficulty: String,
-    @SerialName("caseId")
+    @SerialName("caseType")
     val type: String,
-    @SerialName("type")
     val status: String,
     val cost: CostSerializable,
     val bounty: BountySerializable,

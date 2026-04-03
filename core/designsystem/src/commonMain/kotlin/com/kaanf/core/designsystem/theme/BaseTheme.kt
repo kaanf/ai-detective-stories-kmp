@@ -40,6 +40,7 @@ object AccessDefaults {
     val FingerprintIndicatorGlow = Color(0xCCEBE5D6)
     val FingerprintIndicatorFrame = Color(0xFF333333)
     val EnergyIconBackground = Color(0xFF8A1C1C)
+    val XPIconBackground = Color(0xFF5C8A8A)
     val GoldIconBackground = Color(0xFFD49D0C)
     val CardBackground = Color(0xCC0A0A0A)
     val TimerBorder = Color(0x668A1C1C)

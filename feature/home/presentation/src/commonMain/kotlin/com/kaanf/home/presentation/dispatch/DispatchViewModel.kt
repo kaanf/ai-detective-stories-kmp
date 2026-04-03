@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaanf.core.domain.util.onFailure
 import com.kaanf.core.domain.util.onSuccess
+import com.kaanf.home.domain.model.JobType
 import com.kaanf.home.domain.repository.CaseRepository
+import com.kaanf.home.domain.repository.JobRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,8 +18,10 @@ import kotlinx.coroutines.launch
 
 class DispatchViewModel(
     private val caseRepository: CaseRepository,
+    private val jobRepository: JobRepository,
 ) : ViewModel() {
     private var hasLoadedInitialData = false
+    private var countdownJob: Job? = null
 
     private val _state = MutableStateFlow(DispatchState())
     val state = _state
@@ -40,7 +45,7 @@ class DispatchViewModel(
 
     private fun loadInitialData() {
         getTemporaryCases()
-        startCountdown()
+        fetchJobsAndStartCountdown()
     }
 
     private fun getTemporaryCases() {
@@ -71,17 +76,25 @@ class DispatchViewModel(
         }
     }
 
-    private fun startCountdown() {
+    private fun fetchJobsAndStartCountdown() {
         viewModelScope.launch {
-            _state.update { it.copy(remainingSeconds = INITIAL_COUNTDOWN_SECONDS) }
+            jobRepository.getJobs()
+                .onSuccess { jobs ->
+                    val caseJob = jobs.jobs.firstOrNull { it.type == JobType.Case }
+                    val seconds = caseJob?.timeUntilNextRunInSeconds() ?: 0
+                    startCountdown(seconds)
+                }
+        }
+    }
+
+    private fun startCountdown(initialSeconds: Int) {
+        countdownJob?.cancel()
+        countdownJob = viewModelScope.launch {
+            _state.update { it.copy(remainingSeconds = initialSeconds) }
             while (_state.value.remainingSeconds > 0) {
                 delay(1_000L)
                 _state.update { it.copy(remainingSeconds = it.remainingSeconds - 1) }
             }
         }
-    }
-
-    companion object {
-        private const val INITIAL_COUNTDOWN_SECONDS = 3600
     }
 }

@@ -99,7 +99,7 @@ fun DashboardHeader(user: User) {
                 ResourceBadge(
                     value = user.energy,
                     type = ResourceBadgeType.Bounty,
-                    badge = ResourceBadgeIcon.Energy
+                    badge = ResourceBadgeIcon.XP
                 )
 
                 ResourceBadge(
@@ -129,6 +129,7 @@ fun DashboardHeaderPreview() {
                 profileImageUrl = "https://ads.kaanf.com/profile/profile1.png",
                 gold = 5,
                 energy = 20,
+                xp = 0
             ),
         )
     }

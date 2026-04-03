@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,18 +42,13 @@ import com.kaanf.core.designsystem.theme.AccessSubtitleTextStyle
 import com.kaanf.core.designsystem.theme.DetectiveAiStoriesTheme
 import com.kaanf.core.designsystem.theme.SpecialElite
 import com.kaanf.home.domain.model.Bounty
-import com.kaanf.home.domain.model.Case
 import com.kaanf.home.domain.model.CaseDifficulty
-import com.kaanf.home.domain.model.CaseStatus
 import com.kaanf.home.domain.model.Cost
 import com.kaanf.home.domain.model.TemporaryCase
 import detective_ai_stories.feature.home.presentation.generated.resources.Res
 import detective_ai_stories.feature.home.presentation.generated.resources.case_difficulty_label
 import detective_ai_stories.feature.home.presentation.generated.resources.case_placeholder_description
 import detective_ai_stories.feature.home.presentation.generated.resources.case_primary_action_assign
-import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_bounty
-import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_cost
-import detective_ai_stories.feature.home.presentation.generated.resources.dispatch_description
 import detective_ai_stories.feature.home.presentation.generated.resources.ic_difficulty
 import detective_ai_stories.feature.home.presentation.generated.resources.ic_open_folder
 import org.jetbrains.compose.resources.painterResource
@@ -79,9 +73,9 @@ fun DispatchCaseCard(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            TemporaryCaseCardHeader(case = case)
+            DispatchCaseCardHeader(case = case)
 
-            CaseQuoteBox(case.status != CaseStatus.OPEN)
+            CaseQuoteBox(case.isPicked)
 
             CaseCardFooter(
                 case = case,
@@ -92,7 +86,7 @@ fun DispatchCaseCard(
 }
 
 @Composable
-private fun TemporaryCaseCardHeader(case: TemporaryCase) {
+private fun DispatchCaseCardHeader(case: TemporaryCase) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
@@ -168,7 +162,7 @@ private fun DifficultyIndicator(difficulty: CaseDifficulty) {
 }
 
 @Composable
-private fun CaseQuoteBox(isClassified: Boolean) {
+private fun CaseQuoteBox(isPicked: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -190,7 +184,7 @@ private fun CaseQuoteBox(isClassified: Boolean) {
             modifier = Modifier
                 .padding(16.dp)
                 .blur(
-                    if (!isClassified) 3.dp else 0.dp,
+                    if (!isPicked) 3.dp else 0.dp,
                 ),
             style = AccessSubtitleTextStyle().copy(
                 fontSize = 11.sp,
@@ -237,11 +231,11 @@ private fun CaseCardFooter(
                     )
                 }
 
-                if (case.bounty.energy != null) {
+                if (case.bounty.xp != null) {
                     ResourceBadge(
-                        value = case.bounty.energy ?: 0,
+                        value = case.bounty.xp ?: 0,
                         type = ResourceBadgeType.Bounty,
-                        badge = ResourceBadgeIcon.Energy,
+                        badge = ResourceBadgeIcon.XP,
                     )
                 }
             }
@@ -249,7 +243,7 @@ private fun CaseCardFooter(
         Box(
             modifier = Modifier
                 .border(1.dp, FingerprintIndicatorFrame)
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -290,9 +284,9 @@ fun DispatchCaseCardPreview() {
                 title = "Cinayet sdfkjsdjkfsjkdf sdkjfsdf",
                 difficulty = CaseDifficulty.MEDIUM,
                 type = "Doğu Rıhtımı",
-                status = CaseStatus.OPEN,
                 cost = Cost(energy = 30),
-                bounty = Bounty(energy = 99, gold = 30.0),
+                bounty = Bounty(xp = 99, gold = 30),
+                isPicked = true
             ),
             onPickCase = {},
         )

@@ -32,7 +32,6 @@ import com.kaanf.core.designsystem.component.badge.ResourceBadge
 import com.kaanf.core.designsystem.component.badge.ResourceBadgeIcon
 import com.kaanf.core.designsystem.component.badge.ResourceBadgeType
 import com.kaanf.core.designsystem.theme.AccessDefaults
-import com.kaanf.core.designsystem.theme.AccessIcons
 import com.kaanf.core.designsystem.theme.SpecialElite
 import com.kaanf.core.domain.model.user.User
 import com.kaanf.home.domain.model.PubItem
@@ -122,7 +121,7 @@ private fun PubHeader(user: User?) {
                     ResourceBadge(
                         value = it.energy,
                         type = ResourceBadgeType.Bounty,
-                        badge = ResourceBadgeIcon.Energy
+                        badge = ResourceBadgeIcon.XP
                     )
 
                     ResourceBadge(
@@ -215,6 +214,7 @@ private fun Preview() {
                     profileImageUrl = "",
                     gold = 1000,
                     energy = 10,
+                    xp = 0,
                 ),
                 items = listOf(
                     PubItem(

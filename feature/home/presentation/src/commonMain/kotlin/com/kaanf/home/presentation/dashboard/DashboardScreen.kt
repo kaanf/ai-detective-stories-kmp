@@ -80,6 +80,7 @@ private fun Preview() {
                     profileImageUrl = "",
                     gold = 0,
                     energy = 100,
+                    xp = 0
                 ),
                 cases = listOf(
 
