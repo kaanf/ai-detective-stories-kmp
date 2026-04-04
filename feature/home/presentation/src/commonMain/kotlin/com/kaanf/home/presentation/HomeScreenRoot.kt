@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +20,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.Inter
 import com.kaanf.home.presentation.dashboard.DashboardRoot
 import com.kaanf.home.presentation.dispatch.DispatchRoot
+import com.kaanf.home.presentation.navigation.BarRoute
 import com.kaanf.home.presentation.navigation.BottomNavBar
 import com.kaanf.home.presentation.navigation.BottomNavTab
+import com.kaanf.home.presentation.navigation.DashboardRoute
+import com.kaanf.home.presentation.navigation.InformantsRoute
+import com.kaanf.home.presentation.navigation.ProfileRoute
+import com.kaanf.home.presentation.navigation.SecretaryRoute
 import com.kaanf.home.presentation.pub.PubRoot
 import kotlinx.serialization.Serializable
 
@@ -37,7 +46,14 @@ data object HomeScreenRoute
 
 @Composable
 fun HomeScreenRoot() {
-    var currentTab by rememberSaveable { mutableStateOf(BottomNavTab.Dashboard) }
+    val homeNavController = rememberNavController()
+    val navBackStackEntry by homeNavController.currentBackStackEntryAsState()
+
+    val currentRoute = navBackStackEntry?.destination?.route
+    val currentTab = BottomNavTab.entries.firstOrNull { tab ->
+        tab.route::class.qualifiedName == currentRoute
+    } ?: BottomNavTab.Dashboard
+
     var isLoading by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -57,24 +73,46 @@ fun HomeScreenRoot() {
                         .weight(1f)
                         .fillMaxWidth(),
                 ) {
-                    when (currentTab) {
-                        BottomNavTab.Dashboard -> DashboardRoot(
-                            onLoadingChanged = { isLoading = it },
-                        )
-                        BottomNavTab.Informants -> PlaceholderScreen("MURDERS")
-                        BottomNavTab.Secretary -> DispatchRoot(
-                            onLoadingChanged = { isLoading = it },
-                        )
-                        BottomNavTab.Bar -> PubRoot(
-                            onLoadingChanged = { isLoading = it },
-                        )
-                        BottomNavTab.Profile -> PlaceholderScreen("PROFILE")
+                    NavHost(
+                        navController = homeNavController,
+                        startDestination = DashboardRoute,
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        composable<DashboardRoute> {
+                            DashboardRoot(
+                                onLoadingChanged = { isLoading = it },
+                            )
+                        }
+                        composable<InformantsRoute> {
+                            PlaceholderScreen("MURDERS")
+                        }
+                        composable<SecretaryRoute> {
+                            DispatchRoot(
+                                onLoadingChanged = { isLoading = it },
+                            )
+                        }
+                        composable<BarRoute> {
+                            PubRoot(
+                                onLoadingChanged = { isLoading = it },
+                            )
+                        }
+                        composable<ProfileRoute> {
+                            PlaceholderScreen("PROFILE")
+                        }
                     }
                 }
 
                 BottomNavBar(
                     currentTab = currentTab,
-                    onTabSelected = { currentTab = it },
+                    onTabSelected = { tab ->
+                        homeNavController.navigate(tab.route) {
+                            popUpTo(homeNavController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                 )
             }
         }
