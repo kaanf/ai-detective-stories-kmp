@@ -25,3 +25,16 @@ DerivedData/
 
 CLAUDE.md
 .claude/*
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Env / secrets
+fastlane/.env*
+fastlane/*.json
+fastlane/*.p12
+fastlane/*.cer
+fastlane/*.mobileprovision
