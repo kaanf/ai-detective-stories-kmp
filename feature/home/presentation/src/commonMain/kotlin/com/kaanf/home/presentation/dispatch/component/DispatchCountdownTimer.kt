@@ -33,9 +33,10 @@ fun DispatchCountdownTimer(
     remainingSeconds: Int,
     modifier: Modifier = Modifier,
 ) {
-    val minutes = remainingSeconds / 60
+    val hours = remainingSeconds / 3600
+    val minutes = (remainingSeconds % 3600) / 60
     val seconds = remainingSeconds % 60
-    val timeText = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
+    val timeText = "${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
 
     Box(
         contentAlignment = Alignment.Center,

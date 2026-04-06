@@ -23,8 +23,8 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,8 +39,8 @@ import com.kaanf.home.domain.model.CaseDifficulty
 import com.kaanf.home.domain.model.CaseStatus
 import com.kaanf.home.domain.model.Cost
 import detective_ai_stories.feature.home.presentation.generated.resources.Res
+import detective_ai_stories.feature.home.presentation.generated.resources.case_placeholder_description
 import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_bounty
-import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_client_prefix
 import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_cost
 import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_file_prefix
 import detective_ai_stories.feature.home.presentation.generated.resources.dashboard_case_status_classified
@@ -82,24 +82,22 @@ fun DashboardCaseCard(
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 CaseCardHeader(case = case)
-
-                Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
                     text = case.title.uppercase(),
                     style = AccessHeaderTextStyle().copy(
                         fontSize = 20.sp,
                         letterSpacing = 0.4.sp,
-                        color = titleColor
+                        color = titleColor,
+                        textAlign = TextAlign.Start
                     )
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Text(
-                    text = case.description,
+                    text = stringResource(Res.string.case_placeholder_description),
                     style = TextStyle(
                         fontFamily = SpecialElite,
                         fontSize = 12.sp,
@@ -111,14 +109,10 @@ fun DashboardCaseCard(
                     modifier = if (isClassified) Modifier.blur(2.dp) else Modifier,
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-
                 HorizontalDivider(
                     color = Color(0xFF1A1A1A),
                     thickness = 1.dp,
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
 
                 CaseCardFooter(case = case, isClassified = isClassified)
             }
@@ -146,6 +140,8 @@ private fun CaseCardHeader(case: Case) {
                     .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Text(
+                    modifier = Modifier
+                        .padding(top = 2.dp),
                     text = stringResource(Res.string.dashboard_case_file_prefix, case.type),
                     style = TextStyle(
                         fontFamily = SpecialElite,
@@ -195,6 +191,8 @@ private fun CaseStatusBadge(status: CaseStatus) {
             )
 
             Text(
+                modifier = Modifier
+                    .padding(top = 2.dp),
                 text = label,
                 style = TextStyle(
                     fontFamily = SpecialElite,
@@ -292,9 +290,10 @@ private fun CaseCardFooter(
                     )
 
                     Text(
-                        text = "+${formatNumber(case.bounty.energy ?: 0)}",
+                        text = "+${formatNumber(case.bounty.gold ?: 0)}",
                         style = TextStyle(
                             fontFamily = SpecialElite,
+                            fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp,
                             lineHeight = 16.sp,
                             color = AccessDefaults.GoldIconBackground,
@@ -310,19 +309,19 @@ private fun CaseCardFooter(
                     Icon(
                         modifier = Modifier
                             .size(17.dp),
-                        painter = painterResource(AccessIcons.Energy),
+                        painter = painterResource(AccessIcons.XP),
                         contentDescription = null,
-                        tint = AccessDefaults.SuccessLine,
+                        tint = AccessDefaults.XPIconBackground,
                     )
 
                     Text(
-                        text = "+${case.bounty.energy}",
+                        text = "+${case.bounty.xp}",
                         style = TextStyle(
                             fontFamily = SpecialElite,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp,
                             lineHeight = 16.sp,
-                            color = AccessDefaults.SuccessLine,
+                            color = AccessDefaults.XPIconBackground,
                         ),
                     )
                 }
@@ -350,10 +349,9 @@ fun DashboardCaseCardPreview() {
             Case(
                 id = "1",
                 title = "The Midnight Murders",
-                description = "Multiple victims found near the docks. Strange markings on the walls.",
                 status = CaseStatus.CLOSED,
                 cost = Cost(energy = 20),
-                bounty = Bounty(energy = 25),
+                bounty = Bounty(xp = 25),
                 type = "Steal",
                 difficulty = CaseDifficulty.MEDIUM
             ), {}

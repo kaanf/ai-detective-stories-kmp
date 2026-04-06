@@ -9,7 +9,6 @@ import com.kaanf.home.data.dto.UserCasesSerializable
 import com.kaanf.home.domain.model.Bounty
 import com.kaanf.home.domain.model.Case
 import com.kaanf.home.domain.model.CaseDifficulty
-import com.kaanf.home.domain.model.CaseStatus
 import com.kaanf.home.domain.model.Cost
 import com.kaanf.home.domain.model.TemporaryCase
 import com.kaanf.home.domain.model.TemporaryQuests
@@ -38,7 +37,8 @@ fun TemporaryCaseSerializable.toDomain(): TemporaryCase {
             "easy" -> CaseDifficulty.EASY
             "medium" -> CaseDifficulty.MEDIUM
             else -> CaseDifficulty.HARD
-        }
+        },
+        isPicked = isPicked
     )
 }
 
@@ -46,7 +46,6 @@ fun CaseSerializable.toDomain(): Case {
     return Case(
         id = id,
         title = title,
-        description = description,
         type = type,
         cost = cost.toDomain(),
         bounty = bounty.toDomain(),
@@ -66,7 +65,7 @@ fun CostSerializable.toDomain(): Cost {
 
 fun BountySerializable.toDomain(): Bounty {
     return Bounty(
-        energy = energy,
+        xp = xp,
         gold = gold,
     )
 }

@@ -113,27 +113,27 @@ private fun Preview() {
                         title = "Gasp ve Darb",
                         difficulty = CaseDifficulty.MEDIUM,
                         type = "Sanayi Bölgesi",
-                        status = CaseStatus.OPEN,
                         cost = Cost(energy = 20),
-                        bounty = Bounty(gold = 113.0),
+                        bounty = Bounty(gold = 113),
+                        isPicked = true
                     ),
                     TemporaryCase(
                         id = "2",
                         title = "Kayıp Şahıs",
                         difficulty = CaseDifficulty.HARD,
                         type = "Çürük Diş Sokağı",
-                        status = CaseStatus.OPEN,
                         cost = Cost(energy = 25),
-                        bounty = Bounty(gold = 119.0),
+                        bounty = Bounty(gold = 119),
+                        isPicked = true
                     ),
                     TemporaryCase(
                         id = "3",
                         title = "Cinayet",
                         difficulty = CaseDifficulty.HARD,
                         type = "Doğu Rıhtımı",
-                        status = CaseStatus.OPEN,
                         cost = Cost(energy = 30),
-                        bounty = Bounty(gold = 99.0),
+                        bounty = Bounty(gold = 99),
+                        isPicked = true
                     ),
                 ),
                 remainingSeconds = 1376,

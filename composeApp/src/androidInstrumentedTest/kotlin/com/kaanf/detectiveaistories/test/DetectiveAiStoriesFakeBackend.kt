@@ -15,7 +15,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.http.content.OutgoingContent
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class DetectiveAiStoriesFakeBackend(
@@ -89,7 +88,7 @@ class DetectiveAiStoriesFakeBackend(
                                         email = user.email,
                                         fullName = user.fullName,
                                         profileImageUrl = "",
-                                        gameToken = 42,
+                                        gold = 42,
                                         energy = 100,
                                     ),
                             ),

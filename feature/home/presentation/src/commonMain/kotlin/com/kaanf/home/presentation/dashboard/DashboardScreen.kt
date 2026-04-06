@@ -48,10 +48,6 @@ fun DashboardScreen(
             .fillMaxSize()
             .background(AccessDefaults.PanelAlternativeBackground)
     ) {
-        state.user?.let { user ->
-            DashboardHeader(user = user)
-        }
-
         if (state.cases.isNotEmpty()) {
             DashboardCaseMain(state.cases)
         } else {
@@ -80,6 +76,7 @@ private fun Preview() {
                     profileImageUrl = "",
                     gold = 0,
                     energy = 100,
+                    xp = 0
                 ),
                 cases = listOf(
 

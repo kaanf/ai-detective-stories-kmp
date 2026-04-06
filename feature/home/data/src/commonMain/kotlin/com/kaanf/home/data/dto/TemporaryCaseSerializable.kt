@@ -9,8 +9,9 @@ data class TemporaryCaseSerializable(
     val id: String,
     val title: String,
     val difficulty: String,
-    @SerialName("caseId")
+    @SerialName("caseType")
     val type: String,
     val cost: CostSerializable,
     val bounty: BountySerializable,
+    val isPicked: Boolean
 )

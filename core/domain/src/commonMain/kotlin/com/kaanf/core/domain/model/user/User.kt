@@ -6,6 +6,7 @@ data class User(
     val fullName: String? = null,
     val profileImageUrl: String,
     val gold: Int,
+    val xp: Int,
     val energy: Int
 ) {
     val isCharacterCreated: Boolean

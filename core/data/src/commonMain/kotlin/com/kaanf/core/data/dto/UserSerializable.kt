@@ -11,6 +11,7 @@ data class UserSerializable(
     val fullName: String? = null,
     @SerialName("profileImage")
     val profileImageUrl: String,
-    val gameToken: Int,
-    val energy: Int
+    val gold: Int,
+    val energy: Int,
+    val xp: Int,
 )
