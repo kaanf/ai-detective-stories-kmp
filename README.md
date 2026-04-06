@@ -1,48 +1,140 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
+# Detective AI Stories
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A story-driven detective app built on a modern Kotlin Multiplatform setup.
+This repo splits `auth`, `character creation`, and `home` flows into separate modules while sharing UI and business logic across Android and iOS.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Screenshots
 
-### Build and Run Android Application
+![Screenshot 01 - Login](./docs/screenshots/screenshot_login.jpeg)
+![Screenshot 02 - Register](./docs/screenshots/screenshot_register.jpeg)
+![Screenshot 03 - E-Mail Verification](./docs/screenshots/screenshot_email_verification.jpeg)
+![Screenshot 04 - Verification Success](./docs/screenshots/screenshot_verification_success.jpeg)
+![Screenshot 05 - Character Creation](./docs/screenshots/screenshot_character_creation.jpeg)
+![Screenshot 06 - Dashboard - Empty State](./docs/screenshots/screenshot_dashboard_empty_state.jpeg)
+![Screenshot 07 - Dashboard](./docs/screenshots/screenshot_dashboard.jpeg)
+![Screenshot 08 - Dispatch](./docs/screenshots/screenshot_dispatch.jpeg)
+![Screenshot 09 - Pub](./docs/screenshots/screenshot_pub.jpeg)
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+## What This Project Is About
 
-### Build and Run Desktop (JVM) Application
+Looking at the structure, the app currently revolves around:
 
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
+- sign up / login flows
+- email verification and deep link handling
+- avatar and trait-based character creation
+- a dashboard / dispatch focused home experience
+- a shared design system with feature-based modular architecture
 
-### Build and Run iOS Application
+## Tech Stack
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+- Kotlin Multiplatform
+- Compose Multiplatform
+- Compose Navigation
+- Koin
+- Ktor
+- Room
+- DataStore
+- Ktlint
+- Detekt
 
----
+## Project Structure
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+```text
+.
+├── composeApp                # Main application entry point
+├── core
+│   ├── data                  # Shared data layer
+│   ├── designsystem          # Theme and reusable UI components
+│   ├── domain                # Domain models and contracts
+│   └── presentation          # Shared presentation helpers
+├── feature
+│   ├── auth
+│   │   ├── data
+│   │   ├── domain
+│   │   └── presentation
+│   ├── character
+│   │   ├── data
+│   │   ├── domain
+│   │   └── presentation
+│   └── home
+│       ├── data
+│       ├── db
+│       ├── domain
+│       └── presentation
+├── iosApp                    # iOS host app
+└── build-logic               # Convention plugins
+```
+
+## Quick Start
+
+What you need before running the project:
+
+- JDK 17
+- Android Studio
+- Xcode
+
+```bash
+git clone <repo-url>
+cd detective-ai-stories
+```
+
+## Running the App
+
+### Android
+
+To build a debug version:
+
+```bash
+./gradlew :composeApp:assembleDebug
+```
+
+If you prefer using the IDE, running the `composeApp` configuration is enough.
+
+### iOS
+
+Open the Xcode project:
+
+```bash
+open iosApp/iosApp.xcodeproj
+```
+
+Then run the app on a simulator or a physical device.
+
+## Code Quality
+
+This repo already includes a solid baseline for code quality:
+
+```bash
+./gradlew ktlintCheck
+./gradlew detekt
+./gradlew androidLint
+./gradlew allTests
+```
+
+If you want a broader verification pass:
+
+```bash
+./gradlew check
+```
+
+## Release Note
+
+Android release signing uses the following environment variables or Gradle properties:
+
+- `DETECTIVE_STORE_FILE`
+- `DETECTIVE_STORE_PASSWORD`
+- `DETECTIVE_KEY_ALIAS`
+- `DETECTIVE_KEY_PASSWORD`
+
+If these values are missing, the project can still run normally in debug/development mode. Only release signing is skipped.
+
+## Why This Setup Works
+
+Because even when the product grows, the structure stays easy to reason about:
+
+- `auth` lives in its own space
+- `character creation` can evolve as a standalone feature
+- `home` can expand with dashboard and dispatch style flows
+- `core` keeps shared pieces from leaking everywhere
+
+So adding new features does not immediately turn the repo into a maze.

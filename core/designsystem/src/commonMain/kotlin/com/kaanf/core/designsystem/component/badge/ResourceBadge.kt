@@ -48,17 +48,15 @@ fun ResourceBadge(
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = when (type) {
-                    ResourceBadgeType.Cost,
+                    ResourceBadgeType.Cost -> AccessDefaults.HeadingColor
                     ResourceBadgeType.Bounty,
-                        -> {
+                    ResourceBadgeType.Default-> {
                         when (badge) {
                             ResourceBadgeIcon.Gold -> AccessDefaults.GoldIconBackground
                             ResourceBadgeIcon.XP -> AccessDefaults.XPIconBackground
                             ResourceBadgeIcon.Energy -> AccessDefaults.EnergyIconBackground
                         }
                     }
-
-                    ResourceBadgeType.Default -> AccessDefaults.HeadingColor
                 },
             ),
         )
@@ -75,7 +73,7 @@ fun ResourceBadge(
             ),
             contentDescription = null,
             tint = when (type) {
-                ResourceBadgeType.Cost,
+                ResourceBadgeType.Default,
                 ResourceBadgeType.Bounty,
                     -> {
                     when (badge) {
@@ -85,7 +83,7 @@ fun ResourceBadge(
                     }
                 }
 
-                ResourceBadgeType.Default -> AccessDefaults.HeadingColor
+                ResourceBadgeType.Cost -> AccessDefaults.HeadingColor
             },
         )
     }

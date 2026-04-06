@@ -48,10 +48,6 @@ fun DashboardScreen(
             .fillMaxSize()
             .background(AccessDefaults.PanelAlternativeBackground)
     ) {
-        state.user?.let { user ->
-            DashboardHeader(user = user)
-        }
-
         if (state.cases.isNotEmpty()) {
             DashboardCaseMain(state.cases)
         } else {

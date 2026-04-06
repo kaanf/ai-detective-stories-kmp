@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,7 +30,9 @@ import com.kaanf.core.designsystem.component.layout.LoadingOverlayLayout
 import com.kaanf.core.designsystem.component.layout.SnackbarScaffold
 import com.kaanf.core.designsystem.theme.AccessDefaults
 import com.kaanf.core.designsystem.theme.Inter
+import com.kaanf.home.presentation.component.UserTopPanel
 import com.kaanf.home.presentation.dashboard.DashboardRoot
+import com.kaanf.home.presentation.dashboard.component.DashboardHeader
 import com.kaanf.home.presentation.dispatch.DispatchRoot
 import com.kaanf.home.presentation.navigation.BarRoute
 import com.kaanf.home.presentation.navigation.BottomNavBar
@@ -40,12 +43,15 @@ import com.kaanf.home.presentation.navigation.ProfileRoute
 import com.kaanf.home.presentation.navigation.SecretaryRoute
 import com.kaanf.home.presentation.pub.PubRoot
 import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Serializable
 data object HomeScreenRoute
 
 @Composable
-fun HomeScreenRoot() {
+fun HomeScreenRoot(
+    viewModel: HomeViewModel = koinViewModel(),
+) {
     val homeNavController = rememberNavController()
     val navBackStackEntry by homeNavController.currentBackStackEntryAsState()
 
@@ -55,8 +61,9 @@ fun HomeScreenRoot() {
     } ?: BottomNavTab.Dashboard
 
     var isLoading by remember { mutableStateOf(false) }
-
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     SnackbarScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
         LoadingOverlayLayout(
@@ -68,6 +75,10 @@ fun HomeScreenRoot() {
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
             ) {
+                state.user?.let { user ->
+                    UserTopPanel(user = user)
+                }
+
                 Box(
                     modifier = Modifier
                         .weight(1f)

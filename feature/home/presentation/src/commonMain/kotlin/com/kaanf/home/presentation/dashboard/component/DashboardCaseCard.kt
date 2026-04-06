@@ -290,9 +290,10 @@ private fun CaseCardFooter(
                     )
 
                     Text(
-                        text = "+${formatNumber(case.bounty.xp ?: 0)}",
+                        text = "+${formatNumber(case.bounty.gold ?: 0)}",
                         style = TextStyle(
                             fontFamily = SpecialElite,
+                            fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp,
                             lineHeight = 16.sp,
                             color = AccessDefaults.GoldIconBackground,
@@ -308,19 +309,19 @@ private fun CaseCardFooter(
                     Icon(
                         modifier = Modifier
                             .size(17.dp),
-                        painter = painterResource(AccessIcons.Energy),
+                        painter = painterResource(AccessIcons.XP),
                         contentDescription = null,
-                        tint = AccessDefaults.SuccessLine,
+                        tint = AccessDefaults.XPIconBackground,
                     )
 
                     Text(
                         text = "+${case.bounty.xp}",
                         style = TextStyle(
                             fontFamily = SpecialElite,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp,
                             lineHeight = 16.sp,
-                            color = AccessDefaults.SuccessLine,
+                            color = AccessDefaults.XPIconBackground,
                         ),
                     )
                 }

@@ -13,6 +13,7 @@ import detective_ai_stories.core.designsystem.generated.resources.ic_lightning
 import detective_ai_stories.core.designsystem.generated.resources.ic_red_lightning
 import detective_ai_stories.core.designsystem.generated.resources.ic_star
 import detective_ai_stories.core.designsystem.generated.resources.ic_upload
+import detective_ai_stories.core.designsystem.generated.resources.ic_xp
 
 object AccessIcons {
     val Eye = Res.drawable.ic_eye
@@ -20,7 +21,7 @@ object AccessIcons {
     val Fingerprint = Res.drawable.ic_fingerprint
     val Upload = Res.drawable.ic_upload
     val Energy = Res.drawable.ic_lightning
-    val XP = Res.drawable.ic_star
+    val XP = Res.drawable.ic_xp
     val Gold = Res.drawable.ic_gold
     val KeyOpen = Res.drawable.ic_key_open
     val KeyClosed = Res.drawable.ic_key_lock

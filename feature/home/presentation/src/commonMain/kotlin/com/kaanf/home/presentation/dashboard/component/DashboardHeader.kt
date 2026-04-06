@@ -46,7 +46,7 @@ fun DashboardHeader(user: User) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(AccessDefaults.PanelBackground)
-                .padding(horizontal = 18.dp, vertical = 24.dp),
+                .padding(start = 18.dp, end = 18.dp, top = 24.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -98,13 +98,13 @@ fun DashboardHeader(user: User) {
             ) {
                 ResourceBadge(
                     value = user.energy,
-                    type = ResourceBadgeType.Bounty,
-                    badge = ResourceBadgeIcon.XP
+                    type = ResourceBadgeType.Default,
+                    badge = ResourceBadgeIcon.Energy
                 )
 
                 ResourceBadge(
                     value = user.gold,
-                    type = ResourceBadgeType.Bounty,
+                    type = ResourceBadgeType.Default,
                     badge = ResourceBadgeIcon.Gold
                 )
             }

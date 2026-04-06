@@ -7,35 +7,69 @@ import com.kaanf.core.domain.util.onSuccess
 import com.kaanf.home.domain.model.JobType
 import com.kaanf.home.domain.repository.CaseRepository
 import com.kaanf.home.domain.repository.JobRepository
+import com.kaanf.home.domain.usecase.PickCaseAndSyncUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
 class DispatchViewModel(
     private val caseRepository: CaseRepository,
     private val jobRepository: JobRepository,
+    private val pickCaseAndSyncUseCase: PickCaseAndSyncUseCase,
 ) : ViewModel() {
-    private var hasLoadedInitialData = false
     private var countdownJob: Job? = null
 
-    private val _state = MutableStateFlow(DispatchState())
-    val state = _state
-        .onStart {
-            if (!hasLoadedInitialData) {
-                loadInitialData()
-                hasLoadedInitialData = true
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = DispatchState(),
+    private val remainingSeconds = MutableStateFlow(0)
+
+    private val isLoading = MutableStateFlow(false)
+
+    val state = combine(
+        isLoading,
+        caseRepository.observeTemporaryCases(),
+        remainingSeconds,
+    ) { isLoading, temporaryCases, remainingSeconds ->
+        DispatchState(
+            cases = temporaryCases,
+            isLoading = isLoading,
+            remainingSeconds = remainingSeconds,
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = DispatchState(),
+    )
+
+    init {
+        getJob()
+        getTemporaryCases()
+    }
+
+    private fun getJob() = viewModelScope.launch {
+        jobRepository.getJobs()
+            .onSuccess { jobs ->
+                val caseJob = jobs.jobs.firstOrNull { it.type == JobType.Case }
+                startCountdown(caseJob?.timeUntilNextRunInSeconds() ?: 0)
+            }
+    }
+
+    private fun getTemporaryCases() = viewModelScope.launch {
+        isLoading.value = true
+        caseRepository.getTemporaryCases()
+            .onSuccess {
+                isLoading.value = false
+            }
+            .onFailure {
+                isLoading.value = false
+            }
+    }
 
     fun onAction(action: DispatchAction) {
         when (action) {
@@ -43,57 +77,30 @@ class DispatchViewModel(
         }
     }
 
-    private fun loadInitialData() {
-        getTemporaryCases()
-        fetchJobsAndStartCountdown()
-    }
-
-    private fun getTemporaryCases() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            caseRepository.getTemporaryCases()
-                .onSuccess { temporaryQuests ->
-                    _state.update { it.copy(cases = temporaryQuests.cases) }
-                }
-                .onFailure {
-                    println("Error: ${it.name}")
-                }
-            _state.update { it.copy(isLoading = false) }
-        }
-    }
-
     private fun pickCase(caseId: String) {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            caseRepository.pickCase(caseId)
-                .onSuccess {
-                    getTemporaryCases()
-                }
+            pickCaseAndSyncUseCase(caseId)
+                .onSuccess {}
                 .onFailure {
-                    println("")
-                }
-            _state.update { it.copy(isLoading = false) }
-        }
-    }
-
-    private fun fetchJobsAndStartCountdown() {
-        viewModelScope.launch {
-            jobRepository.getJobs()
-                .onSuccess { jobs ->
-                    val caseJob = jobs.jobs.firstOrNull { it.type == JobType.Case }
-                    val seconds = caseJob?.timeUntilNextRunInSeconds() ?: 0
-                    startCountdown(seconds)
                 }
         }
     }
 
     private fun startCountdown(initialSeconds: Int) {
         countdownJob?.cancel()
+
+        val targetMark = TimeSource.Monotonic.markNow() + initialSeconds.seconds
+
         countdownJob = viewModelScope.launch {
-            _state.update { it.copy(remainingSeconds = initialSeconds) }
-            while (_state.value.remainingSeconds > 0) {
-                delay(1_000L)
-                _state.update { it.copy(remainingSeconds = it.remainingSeconds - 1) }
+            while (true) {
+                val remaining = -targetMark.elapsedNow()
+                val secondsLeft = max(0, ceil(remaining.inWholeMilliseconds / 1000.0).toInt())
+
+                remainingSeconds.value = secondsLeft
+
+                if (targetMark.hasPassedNow()) break
+
+                delay(250L)
             }
         }
     }
